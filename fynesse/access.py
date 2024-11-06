@@ -33,10 +33,3 @@ def download_price_paid_data(year_from, year_to):
             if response.status_code == 200:
                 with open("." + file_name.replace("<year>", str(year)).replace("<part>", str(part)), "wb") as file:
                     file.write(response.content)
-
-def download_postcode_data():
-    base_url = "https://www.getthedata.com/downloads/open_postcode_geo.csv.zip"
-    response = requests.get(base_url)
-    if response.status_code == 200:
-        with open("./open_postcode_geo.csv", "wb") as file:
-            file.write(response.content)
