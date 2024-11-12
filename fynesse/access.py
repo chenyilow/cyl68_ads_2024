@@ -7,6 +7,7 @@ import osmnx as ox
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 import pandas as pd
+import geopandas as gpd
 
 """These are the types of import we might expect in this file
 import httplib2
@@ -128,3 +129,43 @@ def kmeans_clustering(locations_dict, tags, clusters=3):
 
     cluster_df = pd.DataFrame({"City": pd_data["City"], "Cluster": kmeans.labels_})
     return cluster_df
+
+def map(latitude, longitude):
+    kilometer = 2/111
+    north = latitude + kilometer/2
+    south = latitude - kilometer/2
+    west = longitude - kilometer/2
+    east = longitude + kilometer # I have modified this slightly so that the picture looks more squarish later
+    date_threshold = '2019-12-31'
+
+    tags_buildings = {"building": True}
+    pois_buildings = ox.geometries_from_bbox(north, south, east, west, tags_buildings)
+    full_address_pois = pois_buildings[pois_buildings[["addr:housenumber", "addr:street", "addr:postcode"]].notna().all(axis=1)]
+    no_address_pois = pois_buildings[pois_buildings[["addr:housenumber", "addr:street", "addr:postcode"]].isna().any(axis=1)]
+
+    graph = ox.graph_from_bbox(north, south, east, west)
+
+    # Retrieve nodes and edges
+    nodes, edges = ox.graph_to_gdfs(graph)
+
+    # Get place boundary related to the place name as a geodataframe
+    area = ox.geocode_to_gdf("Cambridge")
+
+    fig, ax = plt.subplots()
+
+    # Plot the footprint
+    area.plot(ax=ax, facecolor="white")
+
+    # Plot street edges
+    edges.plot(ax=ax, linewidth=1, edgecolor="dimgray")
+
+    ax.set_xlim([west, east])
+    ax.set_ylim([south, north])
+    ax.set_xlabel("longitude")
+    ax.set_ylabel("latitude")
+
+    # Plot all POIs
+    full_address_pois.plot(ax=ax, color="blue", alpha=0.7, markersize=10)
+    no_address_pois.plot(ax=ax, color="green", alpha=0.7, markersize=10)
+    plt.tight_layout()
+    plt.show()
