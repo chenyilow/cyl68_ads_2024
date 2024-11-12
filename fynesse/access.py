@@ -3,6 +3,10 @@ import requests
 import pymysql
 import csv
 import time
+import osmnx as ox
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+import pandas as pd
 
 """These are the types of import we might expect in this file
 import httplib2
@@ -93,4 +97,34 @@ def count_pois_near_coordinates(latitude: float, longitude: float, tags: dict, d
     Returns:
         dict: A dictionary where keys are the OSM tags and values are the counts of POIs for each tag.
     """
-    return ox.geometries_from_point(center_point=(latitude,longitude), tags=tags, dist=distance_km*1000) # returns all pois in a circle with radius = distance_km in metres centered at center_point
+    poi_counts = {}
+    df = ox.features_from_point(center_point=(latitude,longitude), tags=tags, dist=distance_km*1000) # returns all pois in a circle with radius = distance_km in metres centered at center_point
+    for feature in tags:
+        if feature in df.columns:
+            if tags[feature] == True:
+                poi_counts[feature] = df[feature].notnull().sum()
+            elif type(tags[feature]) == list:
+                poi_counts[feature] = df[feature].isin(tags[feature]).sum()
+        else:
+            poi_counts[feature] = 0
+
+    return poi_counts
+
+def kmeans_clustering(locations_dict, tags, clusters=3):
+
+    data = {feature:[] for feature in tags}
+    data['City'] = []
+    for city in locations_dict:
+        poi_counts = count_pois_near_coordinates(locations_dict[city][0], locations_dict[city][1], tags)
+        data['City'].append(city)
+        for feature in tags:
+            data[feature].append(poi_counts[feature])
+
+    pd_data = pd.DataFrame(data)
+    pd_data = pd_data[['City'] + [col for col in pd_data.columns if col != 'City']]
+
+    features = pd_data[["amenity", "buildings", "historic", "leisure", "shop", "tourism", "religion", "memorial"]]
+    kmeans = KMeans(n_clusters=clusters).fit(features)
+
+    cluster_df = pd.DataFrame({"City": pd_data["City"], "Cluster": kmeans.labels_})
+    return cluster_df
