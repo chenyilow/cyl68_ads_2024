@@ -6,6 +6,10 @@ import time
 import matplotlib.pyplot as plt
 import pandas as pd
 import geopandas as gpd
+import requests
+import zipfile
+import io
+import os
 
 """These are the types of import we might expect in this file
 import httplib2
