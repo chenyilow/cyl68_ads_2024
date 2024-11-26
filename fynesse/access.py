@@ -109,15 +109,13 @@ def download_census_data(code, base_dir=''):
 def load_census_data(code, level='msoa'):
   return pd.read_csv(f'census2021-{code.lower()}/census2021-{code.lower()}-{level}.csv')
 
-def download_census_data(base_dir=''):
+def download_census_coord_data(base_dir=''):
     url = "https://open-geography-portalx-ons.hub.arcgis.com/api/download/v1/items/6beafcfd9b9c4c9993a06b6b199d7e6d/csv?layers=0"
     filename = os.path.basename(url).split('?')[0]
     file_path = os.path.join(base_dir, filename)
     if os.path.exists(file_path):
         print(f"File already exists at: {file_path}.")
         return
-
-    # Download and save the file
     response = requests.get(url)
     response.raise_for_status()
     with open("census_coord.csv", 'wb') as file:
