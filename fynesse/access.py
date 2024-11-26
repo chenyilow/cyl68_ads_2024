@@ -124,7 +124,6 @@ def download_census_data(base_dir=''):
         file.write(response.content)
 
     print(f"File downloaded and saved to: census_coord.csv")
-download_census_data()
 
 def load_census_coord_data(level='msoa'):
     return pd.read_csv('census_coord.csv')
