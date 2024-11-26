@@ -6,7 +6,6 @@ import time
 import matplotlib.pyplot as plt
 import pandas as pd
 import geopandas as gpd
-import requests
 import zipfile
 import io
 import os
@@ -110,23 +109,23 @@ def download_census_data(code, base_dir=''):
 def load_census_data(code, level='msoa'):
   return pd.read_csv(f'census2021-{code.lower()}/census2021-{code.lower()}-{level}.csv')
 
-def download_census_coord_data():
-  url = "https://open-geography-portalx-ons.hub.arcgis.com/api/download/v1/items/6beafcfd9b9c4c9993a06b6b199d7e6d/filegdb?layers=0"
-  extract_dir = os.path.join(base_dir, os.path.splitext(os.path.basename(url))[0])
+def download_census_data(base_dir=''):
+    url = "https://open-geography-portalx-ons.hub.arcgis.com/api/download/v1/items/6beafcfd9b9c4c9993a06b6b199d7e6d/csv?layers=0"
+    filename = os.path.basename(url).split('?')[0]
+    file_path = os.path.join(base_dir, filename)
+    if os.path.exists(file_path):
+        print(f"File already exists at: {file_path}.")
+        return
 
-  if os.path.exists(extract_dir) and os.listdir(extract_dir):
-    print(f"Files already exist at: {extract_dir}.")
-    return
+    # Download and save the file
+    response = requests.get(url)
+    response.raise_for_status()
+    with open("census_coord.csv", 'wb') as file:
+        file.write(response.content)
 
-  os.makedirs(extract_dir, exist_ok=True)
-  response = requests.get(url)
-  response.raise_for_status()
+    print(f"File downloaded and saved to: census_coord.csv")
+download_census_data()
 
-  with zipfile.ZipFile(io.BytesIO(response.content)) as zip_ref:
-    zip_ref.extractall(extract_dir)
-
-  print(f"Files extracted to: {extract_dir}") 
-
-# def load_census_coord_data(level='msoa'):
-#     return pd.read_csv(f'census2021-{code.lower()}/census2021-{code.lower()}-{level}.csv')
+def load_census_coord_data(level='msoa'):
+    return pd.read_csv('census_coord.csv')
 
