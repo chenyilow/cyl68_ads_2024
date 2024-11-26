@@ -31,7 +31,7 @@ def labelled(data):
     """Provide a labelled set of data ready for supervised learning."""
     raise NotImplementedError
 
-def pois_from_coordinates(longitude, latitude, tags, box_width=0.02, box_height=0.02):
+def pois_from_coordinates(latitude, longitude, tags, box_width=0.02, box_height=0.02):
     north = latitude + box_height/2
     south = latitude - box_width/2
     west = longitude - box_width/2
