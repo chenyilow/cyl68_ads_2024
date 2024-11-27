@@ -9,6 +9,7 @@ import geopandas as gpd
 import zipfile
 import io
 import os
+import osmnx as ox
 
 """These are the types of import we might expect in this file
 import httplib2
@@ -125,4 +126,12 @@ def download_census_coord_data(base_dir=''):
 
 def load_census_coord_data(level='msoa'):
     return pd.read_csv('census_coord.csv')
+
+def download_osmnx_data(latitude, longitude, tags, box_width=0.02, box_height=0.02):
+    north = latitude + box_height/2
+    south = latitude - box_width/2
+    west = longitude - box_width/2
+    east = longitude + box_width/2
+    pois = ox.features_from_bbox((west, south, east, north), tags)
+    return pois
 
