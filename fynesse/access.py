@@ -111,18 +111,26 @@ def load_census_data(code, level='msoa'):
   return pd.read_csv(f'census2021-{code.lower()}/census2021-{code.lower()}-{level}.csv')
 
 def download_census_coord_data(base_dir=''):
-    url = "https://open-geography-portalx-ons.hub.arcgis.com/api/download/v1/items/6beafcfd9b9c4c9993a06b6b199d7e6d/csv?layers=0"
+    url = "https://open-geography-portalx-ons.hub.arcgis.com/api/download/v1/items/6beafcfd9b9c4c9993a06b6b199d7e6d/shapefile?layers=0"
     filename = os.path.basename(url).split('?')[0]
     file_path = os.path.join(base_dir, filename)
+    
     if os.path.exists(file_path):
         print(f"File already exists at: {file_path}.")
         return
+    
     response = requests.get(url)
-    response.raise_for_status()
-    with open("census_coord.csv", 'wb') as file:
+    response.raise_for_status() 
+    
+    with open(file_path, 'wb') as file:
         file.write(response.content)
+    
+    print(f"File downloaded and saved to: {file_path}")
 
-    print(f"File downloaded and saved to: census_coord.csv")
+    with zipfile.ZipFile(file_path, 'r') as zip_ref:
+        zip_ref.extractall(base_dir)
+    
+    print(f"Files extracted")
 
 def load_census_coord_data(level='msoa'):
     return pd.read_csv('census_coord.csv')
