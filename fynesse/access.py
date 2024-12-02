@@ -133,7 +133,7 @@ def download_census_coord_data(base_dir=''):
     print(f"Files extracted")
 
 def load_census_coord_data(level='msoa'):
-    return pd.read_csv('census_coord.csv')
+    return gpd.read_file('OA_2021_EW_BGC_V2.shp')
 
 def download_osmnx_data(latitude, longitude, tags, box_width=0.02, box_height=0.02):
     north = latitude + box_height/2
