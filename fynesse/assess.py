@@ -2,6 +2,12 @@ from .config import *
 
 from . import access
 
+import pandas as pd
+import geopandas as gpd
+from shapely.geometry import Point, Polygon
+from shapely.wkt import loads
+from pyproj import CRS, Transformer
+
 """These are the types of import we might expect in this file
 import pandas
 import bokeh
@@ -38,3 +44,29 @@ def pois_from_coordinates(latitude, longitude, tags, box_width=0.02, box_height=
     east = longitude + box_width/2
     pois = ox.features_from_bbox((west, south, east, north), tags)
     return pois
+
+def add_feature_geometry(geodf:gpd.GeoDataFrame):
+    wgs84 = CRS.from_epsg(4326)
+    bng = CRS.from_epsg(27700)
+    transformer = Transformer.from_crs(wgs84, bng)
+
+    geodf[['easting', 'northing']] = geodf.apply(
+        lambda row: pd.Series(transformer.transform(row['latitude'], row['longitude'])),
+        axis=1
+    )
+    geodf["geometry"] = geodf.apply(lambda row: Point(row["easting"], row["northing"]), axis=1)
+    gpd.GeoDataFrame(geodf, geometry='geometry', crs="EPSG:4326")
+    return geodf
+
+def get_feature_counts(feature_gdf:gpd.GeoDataFrame, census_gdf:gpd.GeoDataFrame):
+    joined_gdf = gpd.sjoin(feature_gdf, census_gdf, how="inner", predicate="within")
+    joined_df = pd.DataFrame(joined_gdf)
+    counts = joined_df['0a21cd'].value_counts().reset_index()
+    counts.columns = ['0a21cd', 'count']
+    return counts
+
+def feature_vector(response_df:pd.DataFrame, counts:pd.DataFrame):
+    feature_df = pd.merge(response_df, counts, left_on='geography_code', right_on='0a21cd', how='left')
+    new_feature_df = feature_df.drop(columns=['0a21cd', 'prop_l15', 'db_id'])
+    new_feature_df['count'] = new_feature_df['count'].fillna(0).astype(int)
+    return new_feature_df
