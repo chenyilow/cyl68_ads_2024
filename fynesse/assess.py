@@ -55,8 +55,7 @@ def add_feature_geometry(geodf:gpd.GeoDataFrame):
         axis=1
     )
     geodf["geometry"] = geodf.apply(lambda row: Point(row["easting"], row["northing"]), axis=1)
-    gpd.GeoDataFrame(geodf, geometry='geometry', crs="EPSG:4326")
-    return geodf
+    return gpd.GeoDataFrame(geodf, geometry='geometry', crs="EPSG:4326")
 
 def get_feature_counts(feature_gdf:gpd.GeoDataFrame, census_gdf:gpd.GeoDataFrame):
     joined_gdf = gpd.sjoin(feature_gdf, census_gdf, how="inner", predicate="within")
