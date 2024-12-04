@@ -37,3 +37,9 @@ def rmse(test_features, train_features, test_response, train_response):
     results = new_model.fit()
     predicted_response = results.predict(np.array(test_features))
     return mean_squared_error(np.array(test_response), predicted_response)
+
+def rmse_regularised(test_features, train_features, test_response, train_response, alpha, L1_wt):
+    new_model = sm.OLS(np.array(train_response), np.array(train_features))
+    results = new_model.fit_regularized(alpha=alpha, L1_wt=L1_wt)
+    predicted_response = results.predict(np.array(test_features))
+    return mean_squared_error(np.array(test_response), predicted_response)
