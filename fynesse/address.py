@@ -22,8 +22,8 @@ def kfold(dataframe, groups):
     dataframe = dataframe.sample(frac=1).reset_index(drop=True)
     size = int(len(dataframe) / groups)
     total = size * groups
-    features = [dataframe.iloc[i:i+size,104:] for i in range(0, total-1, size)]
-    response = [dataframe.iloc[i:i+size,22] for i in range(0, total-1, size)]
+    features = [dataframe.iloc[i:i+size,1:] for i in range(0, total-1, size)]
+    response = [dataframe.iloc[i:i+size,0] for i in range(0, total-1, size)]
     if total < len(dataframe):
         features[-1] = pd.concat([features[-1], dataframe.iloc[total:, 104:]])
         response[-1] = pd.concat([response[-1], dataframe.iloc[total:, 22]])
