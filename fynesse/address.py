@@ -28,8 +28,8 @@ def kfold(dataframe, groups):
     features = [dataframe.iloc[i:i+size,1:] for i in range(0, total-1, size)]
     response = [dataframe.iloc[i:i+size,0] for i in range(0, total-1, size)]
     if total < len(dataframe):
-        features[-1] = pd.concat([features[-1], dataframe.iloc[total:, 104:]])
-        response[-1] = pd.concat([response[-1], dataframe.iloc[total:, 22]])
+        features[-1] = pd.concat([features[-1], dataframe.iloc[total:, 1:]])
+        response[-1] = pd.concat([response[-1], dataframe.iloc[total:, 0]])
     return features[0], pd.concat(features[1:]), response[0], pd.concat(response[1:])
 
 def rmse(test_features, train_features, test_response, train_response):
