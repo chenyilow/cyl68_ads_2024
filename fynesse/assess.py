@@ -74,7 +74,7 @@ def feature_counts(response_df:pd.DataFrame, counts:pd.DataFrame):
     return new_feature_df
 
 def feature_vector(feature_df: pd.DataFrame, area:pd.DataFrame):
-    feature_concat = pd.concat(feature_df, area)
+    feature_concat = pd.concat([feature_df, area], axis=1)
     feature_vector_df = feature_concat.apply(lambda row: row["count"] / row["area"], axis=1)
     feature_vector_df = pd.DataFrame(feature_vector_df, columns=["counts_per_area"])
     return feature_vector_df
