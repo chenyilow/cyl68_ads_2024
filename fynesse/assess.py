@@ -45,17 +45,20 @@ def pois_from_coordinates(latitude, longitude, tags, box_width=0.02, box_height=
     pois = ox.features_from_bbox((west, south, east, north), tags)
     return pois
 
-def add_feature_geometry(geodf:gpd.GeoDataFrame):
+def add_feature_geometry(df: pd.DataFrame):
     wgs84 = CRS.from_epsg(4326)
     bng = CRS.from_epsg(27700)
     transformer = Transformer.from_crs(wgs84, bng)
 
-    geodf[['easting', 'northing']] = geodf.apply(
+    df[['easting', 'northing']] = df.apply(
         lambda row: pd.Series(transformer.transform(row['latitude'], row['longitude'])),
         axis=1
     )
-    geodf["geometry"] = geodf.apply(lambda row: Point(row["easting"], row["northing"]), axis=1)
-    return gpd.GeoDataFrame(geodf, geometry='geometry', crs="EPSG:4326")
+
+    geometry = df.apply(lambda row: Point(row["easting"], row["northing"]), axis=1)
+    gdf = gpd.GeoDataFrame(df, geometry=geometry, crs="EPSG:27700")
+    gdf = gdf.set_crs(bng, allow_override=True)
+    return gdf
 
 def get_feature_counts(feature_gdf:gpd.GeoDataFrame, census_gdf:gpd.GeoDataFrame):
     joined_gdf = gpd.sjoin(feature_gdf, census_gdf, how="inner", predicate="within")
@@ -64,8 +67,14 @@ def get_feature_counts(feature_gdf:gpd.GeoDataFrame, census_gdf:gpd.GeoDataFrame
     counts.columns = ['0a21cd', 'count']
     return counts
 
-def feature_vector(response_df:pd.DataFrame, counts:pd.DataFrame):
+def feature_counts(response_df:pd.DataFrame, counts:pd.DataFrame):
     feature_df = pd.merge(response_df, counts, left_on='geography_code', right_on='0a21cd', how='left')
     new_feature_df = feature_df.drop(columns=['0a21cd', 'prop_l15', 'db_id'])
     new_feature_df['count'] = new_feature_df['count'].fillna(0).astype(int)
     return new_feature_df
+
+def feature_vector(feature_df: pd.DataFrame, area:pd.DataFrame):
+    feature_concat = pd.concat(feature_df, area)
+    feature_vector_df = feature_concat.apply(lambda row: row["count"] / row["area"], axis=1)
+    feature_vector_df = pd.DataFrame(feature_vector_df, columns=["counts_per_area"])
+    return feature_vector_df
