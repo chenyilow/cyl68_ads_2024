@@ -69,7 +69,7 @@ def get_feature_counts(feature_gdf:gpd.GeoDataFrame, census_gdf:gpd.GeoDataFrame
 
 def feature_counts(response_df:pd.DataFrame, counts:pd.DataFrame):
     feature_df = pd.merge(response_df, counts, left_on='geography_code', right_on='0a21cd', how='left')
-    new_feature_df = feature_df.drop(columns=['0a21cd', 'prop_l15', 'db_id'])
+    new_feature_df = feature_df.drop(columns=feature_df.columns[1:4])
     new_feature_df['count'] = new_feature_df['count'].fillna(0).astype(int)
     return new_feature_df
 
