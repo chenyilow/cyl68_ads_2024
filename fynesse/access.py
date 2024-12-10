@@ -110,8 +110,7 @@ def download_census_data(code, base_dir=''):
 def load_census_data(code, level='msoa'):
   return pd.read_csv(f'census2021-{code.lower()}/census2021-{code.lower()}-{level}.csv')
 
-def download_census_coord_data(base_dir=''):
-    url = "https://open-geography-portalx-ons.hub.arcgis.com/api/download/v1/items/6beafcfd9b9c4c9993a06b6b199d7e6d/shapefile?layers=0"
+def download_census_coord_data(url, base_dir=''):
     filename = os.path.basename(url).split('?')[0]
     file_path = os.path.join(base_dir, filename)
     
@@ -132,8 +131,8 @@ def download_census_coord_data(base_dir=''):
     
     print(f"Files extracted")
 
-def load_census_coord_data(level='msoa'):
-    return gpd.read_file('OA_2021_EW_BGC_V2.shp')
+def load_census_coord_data(fileName):
+    return gpd.read_file(fileName)
 
 def download_osmnx_data(latitude, longitude, tags, box_width=0.02, box_height=0.02):
     north = latitude + box_height/2
