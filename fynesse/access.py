@@ -110,11 +110,13 @@ def download_census_data(code, base_dir=''):
 def load_census_data(code, level='msoa'):
   return pd.read_csv(f'census2021-{code.lower()}/census2021-{code.lower()}-{level}.csv')
 
-def download_census_coord_data(url, fileName, base_dir=''):
+def download_census_coord_data(url, base_dir):
+
+    os.makedirs(base_dir, exist_ok=True)
+
     filename = os.path.basename(url).split('?')[0]
     file_path = os.path.join(base_dir, filename)
-    file_path = os.path.join(file_path, fileName)
-    
+
     if os.path.exists(file_path):
         print(f"File already exists at: {file_path}.")
         return
@@ -130,10 +132,21 @@ def download_census_coord_data(url, fileName, base_dir=''):
     with zipfile.ZipFile(file_path, 'r') as zip_ref:
         zip_ref.extractall(base_dir)
     
-    print(f"Files extracted")
+    print(f"Files extracted to: {base_dir}")
 
-def load_census_coord_data(fileName):
-    return gpd.read_file(fileName)
+def load_census_coord_data(fileName, base_dir):
+
+    file_path = os.path.join(base_dir, fileName)
+
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"The file '{fileName}' was not found in the directory '{base_dir}'.")
+
+    try:
+        data = gpd.read_file(file_path)
+        print(f"Data successfully loaded from: {file_path}")
+        return data
+    except Exception as e:
+        raise RuntimeError(f"Failed to load the file '{fileName}'. Error: {e}")
 
 def download_osmnx_data(latitude, longitude, tags, box_width=0.02, box_height=0.02):
     north = latitude + box_height/2
