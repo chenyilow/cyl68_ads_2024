@@ -104,9 +104,9 @@ def plot_nodes(lat, lon, place_name, gdf:gpd.GeoDataFrame, box_width=0.02, box_h
 
     fig, ax = plt.subplots(figsize=(10, 10))
 
-    area.plot(ax=ax, facecolor="white", edgecolor="black", alpha=0.5)
-    edges.plot(ax=ax, linewidth=1, edgecolor="dimgray")
-    gdf_points.plot(ax=ax, color="blue", alpha=1, markersize=50)
+    area.plot(ax=ax, facecolor="white", edgecolor="black", alpha=0.5, zorder=1)
+    edges.plot(ax=ax, linewidth=1, edgecolor="dimgray", zorder=2)
+    gdf_points.plot(ax=ax, color="blue", alpha=1, markersize=50, zorder=3)
 
     ax.set_xlim([west, east])
     ax.set_ylim([south, north])
