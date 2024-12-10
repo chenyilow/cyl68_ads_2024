@@ -82,7 +82,7 @@ def feature_vector(feature_df: pd.DataFrame, area:pd.DataFrame):
     feature_vector_df = pd.DataFrame(feature_vector_df, columns=["counts_per_area"])
     return feature_vector_df
 
-def plot_nodes(lat, lon, gdf:gpd.GeoDataFrame, box_width=0.02, box_height=0.02):
+def plot_nodes(lat, lon, place_name, gdf:gpd.GeoDataFrame, box_width=0.02, box_height=0.02):
 
     north = lat + box_height / 2
     south = lat - box_height / 2
@@ -94,7 +94,8 @@ def plot_nodes(lat, lon, gdf:gpd.GeoDataFrame, box_width=0.02, box_height=0.02):
 
     lats = np.array(gdf["latitude"]).astype(float)
     lons = np.array(gdf["longitude"]).astype(float)
-
+    
+    area = ox.geocode_to_gdf(place_name)
     gdf_points = gpd.GeoDataFrame(geometry=gpd.points_from_xy(lons, lats))
     gdf_points.set_crs("EPSG:4326", inplace=True)
 
