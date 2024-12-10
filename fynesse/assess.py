@@ -108,6 +108,7 @@ def plot_nodes(lat, lon, place_name, gdf:gpd.GeoDataFrame, box_width=0.02, box_h
     edges.plot(ax=ax, linewidth=1, edgecolor="dimgray", zorder=2)
     gdf_points.plot(ax=ax, color="blue", alpha=1, markersize=50, zorder=3)
 
+    ax.set_title(f"Map of {place_name}")
     ax.set_xlim([west, east])
     ax.set_ylim([south, north])
     ax.set_xlabel("Longitude")
