@@ -110,9 +110,10 @@ def download_census_data(code, base_dir=''):
 def load_census_data(code, level='msoa'):
   return pd.read_csv(f'census2021-{code.lower()}/census2021-{code.lower()}-{level}.csv')
 
-def download_census_coord_data(url, base_dir=''):
+def download_census_coord_data(url, fileName, base_dir=''):
     filename = os.path.basename(url).split('?')[0]
     file_path = os.path.join(base_dir, filename)
+    file_path = os.path.join(file_path, fileName)
     
     if os.path.exists(file_path):
         print(f"File already exists at: {file_path}.")
