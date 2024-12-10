@@ -4,9 +4,12 @@ from . import access
 
 import pandas as pd
 import geopandas as gpd
+import numpy as np
 from shapely.geometry import Point, Polygon
 from shapely.wkt import loads
 from pyproj import CRS, Transformer
+import osmnx as ox
+import matplotlib.pyplot as plt
 
 """These are the types of import we might expect in this file
 import pandas
@@ -78,3 +81,36 @@ def feature_vector(feature_df: pd.DataFrame, area:pd.DataFrame):
     feature_vector_df = feature_concat.apply(lambda row: row["count"] / row["area"], axis=1)
     feature_vector_df = pd.DataFrame(feature_vector_df, columns=["counts_per_area"])
     return feature_vector_df
+
+def plot_nodes(lat, lon, gdf:gpd.GeoDataFrame, box_width=0.02, box_height=0.02):
+
+    north = lat + box_height / 2
+    south = lat - box_height / 2
+    west = lon - box_width / 2
+    east = lon + box_width / 2
+
+    graph = ox.graph_from_bbox((west, south, east, north))
+    nodes, edges = ox.graph_to_gdfs(graph)
+
+    lats = np.array(gdf["latitude"]).astype(float)
+    lons = np.array(gdf["longitude"]).astype(float)
+
+    gdf_points = gpd.GeoDataFrame(geometry=gpd.points_from_xy(lons, lats))
+    gdf_points.set_crs("EPSG:4326", inplace=True)
+
+    area = area.to_crs("EPSG:4326")
+    edges = edges.to_crs("EPSG:4326")
+
+    fig, ax = plt.subplots(figsize=(10, 10))
+
+    area.plot(ax=ax, facecolor="white", edgecolor="black", alpha=0.5)
+    edges.plot(ax=ax, linewidth=1, edgecolor="dimgray")
+    gdf_points.plot(ax=ax, color="blue", alpha=1, markersize=50)
+
+    ax.set_xlim([west, east])
+    ax.set_ylim([south, north])
+    ax.set_xlabel("Longitude")
+    ax.set_ylabel("Latitude")
+
+    plt.tight_layout()
+    plt.show()
