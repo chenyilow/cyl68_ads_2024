@@ -97,10 +97,10 @@ def plot_nodes(lat, lon, place_name, gdf:gpd.GeoDataFrame, box_width=0.02, box_h
     
     area = ox.geocode_to_gdf(place_name)
     gdf_points = gpd.GeoDataFrame(geometry=gpd.points_from_xy(lons, lats))
-    gdf_points.set_crs("EPSG:4326", inplace=True)
 
     area = area.to_crs("EPSG:4326")
     edges = edges.to_crs("EPSG:4326")
+    gdf_points.set_crs("EPSG:4326", inplace=True)
 
     fig, ax = plt.subplots(figsize=(10, 10))
 
