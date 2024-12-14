@@ -1,0 +1,1867 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Keep aspect ratio if custom image width or height is specified
+    \setkeys{Gin}{keepaspectratio}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{soul}      % strikethrough (\st) support for pandoc >= 3.0.0
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{ads\_course\_assessment}
+    
+    
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@ges}{\let\PY@bf=\textbf\let\PY@it=\textit}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    
+
+    \section{Assessment for Advanced Data
+Science}\label{assessment-for-advanced-data-science}
+
+\section{\texorpdfstring{\emph{Data
+Pipelines}}{Data Pipelines}}\label{data-pipelines}
+
+    \subsection{Radzim Sendyka, Christian Cabrera, Carl Henrik Ek and Neil
+D.
+Lawrence}\label{radzim-sendyka-christian-cabrera-carl-henrik-ek-and-neil-d.-lawrence}
+
+\subsubsection{19 November 2024}\label{november-2024}
+
+    Welcome to the course assessment for the Advanced Data Science unit. In
+this assessment, you will build two data pipelines and prediction
+systems.
+
+The maximum total mark for this assessment is 20. That mark is split
+into two miniprojects below. - The first miniproject is worth 7 marks. -
+The second miniproject is worth 13 marks.
+
+\emph{The check Session for this Assessment is 03 December 2024.}
+
+    \section{Task 1 (7 marks)}\label{task-1-7-marks}
+
+    This example project builds on your experience from the practicals,
+using Open Street Maps, and connecting them to real-world datasets.
+
+Your prediction system will be based on data from the 2021 UK Census,
+and Open Street Maps.
+
+    \subsubsection{Build a data pipeline and prediction
+system.}\label{build-a-data-pipeline-and-prediction-system.}
+
+Structure your system around the
+\href{https://inverseprobability.com/talks/notes/access-assess-address-a-pipeline-for-automated-data-science.html}{Access-Assess-Address}
+framework for automated data science. Use the framework of
+\href{https://inverseprobability.com/publications/data-readiness-levels.html}{Data
+Readiness Levels} to track the state of your datasets throughout the
+process. Visualise your data and predictions using appropriate charts
+and graphics. Remember, your notebook should tell a story.
+
+1.1. Download the data from online sources. In this task you will need:
+- UK Census Data - The UK Census data file for and Socio-economic
+Classification (NS SEC)
+\href{https://www.ons.gov.uk/datasets/TS062/editions/2021/versions/5}{here}
+or \href{https://www.nomisweb.co.uk/sources/census_2021_bulk}{here}. Use
+the most detailed area type (Output Areas). - One other UK Census data
+file of your choosing
+\href{https://www.ons.gov.uk/search?topics=9731,6646,3845,9497,4262,4128,7755,4994,6885,9724,7367&filter=datasets}{here}
+or \href{https://www.nomisweb.co.uk/sources/census_2021_bulk}{here}. Use
+the most detailed area type available. - Geographic coordinates of
+Census Output Areas
+\href{https://www.data.gov.uk/dataset/4d4e021d-fe98-4a0e-88e2-3ead84538537/output-areas-december-2021-boundaries-ew-bgc-v2}{here}.
+- Spatial data - Set up an API connection to Open Street Maps
+\href{https://osmnx.readthedocs.io/en/stable/}{here}. Optionally, to be
+able to use more data in training, you might want to also download the
+entire map for England (or more)
+\href{https://download.openstreetmap.fr/extracts/}{here} or
+\href{https://wiki.openstreetmap.org/wiki/Planet.osm}{here}.
+
+1.2. Structure the data, and upload it to your AWS database.
+
+\begin{itemize}
+\item
+  Census datasets can be huge and unwieldy to manipulate directly in
+  python frameworks such as pandas. As a result we will host the data in
+  a relational database.
+\item
+  Using a cloud hosted database (such as MariaDB hosted on the AWS RDS
+  service), you will construct a database containing tables that contain
+  per-output-area data, latitudes and longitudes of the output areas,
+  and potentially, extracted selected open street maps features from the
+  country-wide data file.
+\item
+  Make sure you set the correct indices on your data, which will allow
+  your code to run much faster. Hint: create an index on any columns you
+  will be looking up, and joint indices if your lookup involves multiple
+  columns (like coordinates).
+\end{itemize}
+
+You will likely find the following resources helpful.
+
+\begin{itemize}
+\item
+  Lecture 1, 2 and 3.
+\item
+  Lab class 1 and 2.
+\item
+  \emph{Note, this particular dataset could probably be handled directly
+  in pandas, but you are explicitly tasked with using a database. This
+  is a compromise from previous iterations of this course, where
+  students spent quite a lot of time struggling from the size of the
+  data. This is an opportunity for you to demonstrate your skills, as
+  well as prepare for the second part of the assessment where databases
+  might be necessary. Approach that do not use databases where needed
+  will be penalised during marking.}
+\end{itemize}
+
+2.0. Explore the data.
+
+\begin{itemize}
+\tightlist
+\item
+  To make predictions you will augment your data with information
+  obtained from Open Street Map: an open license source of mapping
+  information. You will need to use the techniques you have learnt in
+  the course to indentify and incorporate useful features for your
+  prediction tasks.
+\item
+  Look at the percentage of students (NS SEC code L15) in the individual
+  output areas, and explore how it's related to various types of open
+  street map features in those locations. Use the relationships you
+  found to suggest the features to be used in a system that predicts
+  percentage of students in a given area.
+\item
+  Do the same for an additional census variable (e.g., the average age
+  in a given area).
+\end{itemize}
+
+3.0. Make a prediction system. - Use Open Street Maps to predict
+Socio-Economic Status - in particular, the percent of full time
+students, from OSM features. Your function should take as input a
+coordinate pair (you can assume it will be in England), and return an
+estimate for the share of students in that area.
+
+\begin{itemize}
+\tightlist
+\item
+  Do the same for the additional census variable you selected in the
+  previous step.
+\end{itemize}
+
+Hints:
+
+\begin{itemize}
+\item
+  \emph{Some of the census data sheets are very detailed. You might want
+  to try ``boiling them down'' to some aggregate value or selecting just
+  the most important columns.}
+\item
+  \emph{This assignment is focused on data pipelines, rather than
+  machine learning, so we do not expect any advanced architectures here
+  - a linear model or similar is perfectly fine.}
+\item
+  \emph{For data exploration, or picking your second dataset, you may
+  find useful the \href{https://www.ons.gov.uk/census/maps/}{interactive
+  map} of the census data.}
+\end{itemize}
+
+    \subsubsection{Story.}\label{story.}
+
+\begin{itemize}
+\item
+  Remember the notebook you create should tell a story, any code that is
+  not critical to that story can safely be placed into the associated
+  analysis library and imported for use (structured as given in the
+  Fynesse template). Make sure your decisions are well substanciated and
+  flow nicely throughout the notebook, with clear explanations.
+\item
+  Explain everything you do. Why is your question important, why you
+  selected the datasets you did, why did you join them how you did, why
+  did you look at the things you looked at.
+\end{itemize}
+
+Make sure in your notebook you discuss the design decisions you made in
+your pipeline and prediction system. How did you structure your
+notebook? How did you track data readiness? Which aspects of your system
+could be improved further?
+
+Make sure you compare how you predict student population and your second
+chosen property. What differences are there, in the underlying data,
+process, and results?
+
+Make sure you discuss the reusability of your data pipeline and
+prediction system. What changes to the underlying data/system is it
+resilient to, and what isn't it? What work would need to be done to
+adjust it to answer questions about other statistics, or a different
+country, instead?
+
+    \subsubsection{Fynesse library.}\label{fynesse-library.}
+
+\begin{itemize}
+\item
+  Alongside your implementation you will provide a short repository
+  overview describing how you have implemented the different parts of
+  the project and where you have placed those parts in your code
+  repository. You will submit your code alongside a version of this
+  notebook that will allow your examiner to understand and reconstruct
+  the thinking behind your analysis. This notebook is structured to help
+  you in creating that description and allow you to understand how we
+  will allocate the marks. You should make use of the Fynesse framework
+  (https://github.com/lawrennd/fynesse\_template) for structuring your
+  code.
+\item
+  One artefact to be included in your submission is a python library
+  structured according to the ``Access, Assess, Address'' standard for
+  data science solutions. You will submit this library alongside your
+  code. Use the cell below to perform the necessary installation
+  instructions for your library. You should base your module on the
+  template repository given by the Fynesse template repository. That
+  should make it pip-installable as below.
+  \texttt{\%pip\ install\ git+https://github.com/lawrennd/fynesse\_template.git}.
+  You can either replace fynesse with the name you've given your
+  analysis module or you can leave the name as fynesse if you prefer.
+\item
+  Remember the notebook you create should tell a story, any code that is
+  not critical to that story can safely be placed into the associated
+  analysis library and imported for use (structured as given in the
+  Fynesse template). Remember to include you fynesse library in your
+  submission.
+\end{itemize}
+
+    \subsection{Access}\label{access}
+
+    \#1.1
+
+Firstly, we will download the following UK Census Data: 1. TS067:
+National Statistics Socio-economic Classification 2.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} install your library here}
+\PY{c+c1}{\PYZsh{} \PYZpc{}pip install git+https://github.com/lawrennd/fynesse\PYZus{}template.git \PYZsh{} TODO: change to your library}
+\PY{o}{\PYZpc{}}\PY{k}{pip} install osmnx
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Collecting osmnx
+  Downloading osmnx-2.0.0-py3-none-any.whl.metadata (4.8 kB)
+Requirement already satisfied: geopandas>=1.0 in /usr/local/lib/python3.10/dist-
+packages (from osmnx) (1.0.1)
+Requirement already satisfied: networkx>=2.5 in /usr/local/lib/python3.10/dist-
+packages (from osmnx) (3.4.2)
+Requirement already satisfied: numpy>=1.22 in /usr/local/lib/python3.10/dist-
+packages (from osmnx) (1.26.4)
+Requirement already satisfied: pandas>=1.4 in /usr/local/lib/python3.10/dist-
+packages (from osmnx) (2.2.2)
+Requirement already satisfied: requests>=2.27 in /usr/local/lib/python3.10/dist-
+packages (from osmnx) (2.32.3)
+Requirement already satisfied: shapely>=2.0 in /usr/local/lib/python3.10/dist-
+packages (from osmnx) (2.0.6)
+Requirement already satisfied: pyogrio>=0.7.2 in /usr/local/lib/python3.10/dist-
+packages (from geopandas>=1.0->osmnx) (0.10.0)
+Requirement already satisfied: packaging in /usr/local/lib/python3.10/dist-
+packages (from geopandas>=1.0->osmnx) (24.2)
+Requirement already satisfied: pyproj>=3.3.0 in /usr/local/lib/python3.10/dist-
+packages (from geopandas>=1.0->osmnx) (3.7.0)
+Requirement already satisfied: python-dateutil>=2.8.2 in
+/usr/local/lib/python3.10/dist-packages (from pandas>=1.4->osmnx) (2.8.2)
+Requirement already satisfied: pytz>=2020.1 in /usr/local/lib/python3.10/dist-
+packages (from pandas>=1.4->osmnx) (2024.2)
+Requirement already satisfied: tzdata>=2022.7 in /usr/local/lib/python3.10/dist-
+packages (from pandas>=1.4->osmnx) (2024.2)
+Requirement already satisfied: charset-normalizer<4,>=2 in
+/usr/local/lib/python3.10/dist-packages (from requests>=2.27->osmnx) (3.4.0)
+Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.10/dist-
+packages (from requests>=2.27->osmnx) (3.10)
+Requirement already satisfied: urllib3<3,>=1.21.1 in
+/usr/local/lib/python3.10/dist-packages (from requests>=2.27->osmnx) (2.2.3)
+Requirement already satisfied: certifi>=2017.4.17 in
+/usr/local/lib/python3.10/dist-packages (from requests>=2.27->osmnx) (2024.8.30)
+Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.10/dist-
+packages (from python-dateutil>=2.8.2->pandas>=1.4->osmnx) (1.16.0)
+Downloading osmnx-2.0.0-py3-none-any.whl (99 kB)
+   \textcolor{ansi-black-intense}{━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━} \textcolor{ansi-green}{99.4/99.4 kB}
+\textcolor{ansi-red}{1.8 MB/s} eta \textcolor{ansi-cyan}{0:00:00}
+Installing collected packages: osmnx
+Successfully installed osmnx-2.0.0
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{osmnx} \PY{k}{as} \PY{n+nn}{ox}
+\PY{c+c1}{\PYZsh{} TODO: more imports here}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZpc{}}\PY{k}{pip} uninstall \PYZhy{}\PYZhy{}yes fynesse
+\PY{o}{\PYZpc{}}\PY{k}{pip} install git+https://github.com/chenyilow/cyl68\PYZus{}ads\PYZus{}2024.git
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ansi-yellow}{WARNING: Skipping fynesse as it is not installed.}\textcolor{ansi-yellow}{
+}Collecting git+https://github.com/chenyilow/cyl68\_ads\_2024.git
+  Cloning https://github.com/chenyilow/cyl68\_ads\_2024.git to /tmp/pip-req-
+build-3d063bwm
+  Running command git clone --filter=blob:none --quiet
+https://github.com/chenyilow/cyl68\_ads\_2024.git /tmp/pip-req-build-3d063bwm
+  Resolved https://github.com/chenyilow/cyl68\_ads\_2024.git to commit
+d5a488974834f3ec86dfffe1529cb424a21f1218
+  Preparing metadata (setup.py) {\ldots} done
+Requirement already satisfied: pandas in /usr/local/lib/python3.10/dist-packages
+(from fynesse==0.1.0) (2.2.2)
+Requirement already satisfied: numpy in /usr/local/lib/python3.10/dist-packages
+(from fynesse==0.1.0) (1.26.4)
+Collecting jupyter (from fynesse==0.1.0)
+  Downloading jupyter-1.1.1-py2.py3-none-any.whl.metadata (2.0 kB)
+Requirement already satisfied: matplotlib in /usr/local/lib/python3.10/dist-
+packages (from fynesse==0.1.0) (3.8.0)
+Requirement already satisfied: notebook in /usr/local/lib/python3.10/dist-
+packages (from jupyter->fynesse==0.1.0) (6.5.5)
+Requirement already satisfied: jupyter-console in
+/usr/local/lib/python3.10/dist-packages (from jupyter->fynesse==0.1.0) (6.1.0)
+Requirement already satisfied: nbconvert in /usr/local/lib/python3.10/dist-
+packages (from jupyter->fynesse==0.1.0) (7.16.4)
+Requirement already satisfied: ipykernel in /usr/local/lib/python3.10/dist-
+packages (from jupyter->fynesse==0.1.0) (5.5.6)
+Requirement already satisfied: ipywidgets in /usr/local/lib/python3.10/dist-
+packages (from jupyter->fynesse==0.1.0) (7.7.1)
+Collecting jupyterlab (from jupyter->fynesse==0.1.0)
+  Downloading jupyterlab-4.3.1-py3-none-any.whl.metadata (16 kB)
+Requirement already satisfied: contourpy>=1.0.1 in
+/usr/local/lib/python3.10/dist-packages (from matplotlib->fynesse==0.1.0)
+(1.3.1)
+Requirement already satisfied: cycler>=0.10 in /usr/local/lib/python3.10/dist-
+packages (from matplotlib->fynesse==0.1.0) (0.12.1)
+Requirement already satisfied: fonttools>=4.22.0 in
+/usr/local/lib/python3.10/dist-packages (from matplotlib->fynesse==0.1.0)
+(4.55.0)
+Requirement already satisfied: kiwisolver>=1.0.1 in
+/usr/local/lib/python3.10/dist-packages (from matplotlib->fynesse==0.1.0)
+(1.4.7)
+Requirement already satisfied: packaging>=20.0 in
+/usr/local/lib/python3.10/dist-packages (from matplotlib->fynesse==0.1.0) (24.2)
+Requirement already satisfied: pillow>=6.2.0 in /usr/local/lib/python3.10/dist-
+packages (from matplotlib->fynesse==0.1.0) (11.0.0)
+Requirement already satisfied: pyparsing>=2.3.1 in
+/usr/local/lib/python3.10/dist-packages (from matplotlib->fynesse==0.1.0)
+(3.2.0)
+Requirement already satisfied: python-dateutil>=2.7 in
+/usr/local/lib/python3.10/dist-packages (from matplotlib->fynesse==0.1.0)
+(2.8.2)
+Requirement already satisfied: pytz>=2020.1 in /usr/local/lib/python3.10/dist-
+packages (from pandas->fynesse==0.1.0) (2024.2)
+Requirement already satisfied: tzdata>=2022.7 in /usr/local/lib/python3.10/dist-
+packages (from pandas->fynesse==0.1.0) (2024.2)
+Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.10/dist-
+packages (from python-dateutil>=2.7->matplotlib->fynesse==0.1.0) (1.16.0)
+Requirement already satisfied: ipython-genutils in
+/usr/local/lib/python3.10/dist-packages (from
+ipykernel->jupyter->fynesse==0.1.0) (0.2.0)
+Requirement already satisfied: ipython>=5.0.0 in /usr/local/lib/python3.10/dist-
+packages (from ipykernel->jupyter->fynesse==0.1.0) (7.34.0)
+Requirement already satisfied: traitlets>=4.1.0 in
+/usr/local/lib/python3.10/dist-packages (from
+ipykernel->jupyter->fynesse==0.1.0) (5.7.1)
+Requirement already satisfied: jupyter-client in /usr/local/lib/python3.10/dist-
+packages (from ipykernel->jupyter->fynesse==0.1.0) (6.1.12)
+Requirement already satisfied: tornado>=4.2 in /usr/local/lib/python3.10/dist-
+packages (from ipykernel->jupyter->fynesse==0.1.0) (6.3.3)
+Requirement already satisfied: widgetsnbextension\textasciitilde{}=3.6.0 in
+/usr/local/lib/python3.10/dist-packages (from
+ipywidgets->jupyter->fynesse==0.1.0) (3.6.10)
+Requirement already satisfied: jupyterlab-widgets>=1.0.0 in
+/usr/local/lib/python3.10/dist-packages (from
+ipywidgets->jupyter->fynesse==0.1.0) (3.0.13)
+Requirement already satisfied: prompt-toolkit!=3.0.0,!=3.0.1,<3.1.0,>=2.0.0 in
+/usr/local/lib/python3.10/dist-packages (from jupyter-
+console->jupyter->fynesse==0.1.0) (3.0.48)
+Requirement already satisfied: pygments in /usr/local/lib/python3.10/dist-
+packages (from jupyter-console->jupyter->fynesse==0.1.0) (2.18.0)
+Collecting async-lru>=1.0.0 (from jupyterlab->jupyter->fynesse==0.1.0)
+  Downloading async\_lru-2.0.4-py3-none-any.whl.metadata (4.5 kB)
+Requirement already satisfied: httpx>=0.25.0 in /usr/local/lib/python3.10/dist-
+packages (from jupyterlab->jupyter->fynesse==0.1.0) (0.27.2)
+\textcolor{ansi-yellow}{WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None,
+status=None)) after connection broken by 'ProtocolError('Connection aborted.',
+RemoteDisconnected('Remote end closed connection without response'))':
+/simple/ipykernel/}\textcolor{ansi-yellow}{
+}Collecting ipykernel (from jupyter->fynesse==0.1.0)
+  Downloading ipykernel-6.29.5-py3-none-any.whl.metadata (6.3 kB)
+Requirement already satisfied: jinja2>=3.0.3 in /usr/local/lib/python3.10/dist-
+packages (from jupyterlab->jupyter->fynesse==0.1.0) (3.1.4)
+Requirement already satisfied: jupyter-core in /usr/local/lib/python3.10/dist-
+packages (from jupyterlab->jupyter->fynesse==0.1.0) (5.7.2)
+Collecting jupyter-lsp>=2.0.0 (from jupyterlab->jupyter->fynesse==0.1.0)
+  Downloading jupyter\_lsp-2.2.5-py3-none-any.whl.metadata (1.8 kB)
+Collecting jupyter-server<3,>=2.4.0 (from jupyterlab->jupyter->fynesse==0.1.0)
+  Downloading jupyter\_server-2.14.2-py3-none-any.whl.metadata (8.4 kB)
+Collecting jupyterlab-server<3,>=2.27.1 (from
+jupyterlab->jupyter->fynesse==0.1.0)
+  Downloading jupyterlab\_server-2.27.3-py3-none-any.whl.metadata (5.9 kB)
+Requirement already satisfied: notebook-shim>=0.2 in
+/usr/local/lib/python3.10/dist-packages (from
+jupyterlab->jupyter->fynesse==0.1.0) (0.2.4)
+Requirement already satisfied: setuptools>=40.1.0 in
+/usr/local/lib/python3.10/dist-packages (from
+jupyterlab->jupyter->fynesse==0.1.0) (75.1.0)
+Requirement already satisfied: tomli>=1.2.2 in /usr/local/lib/python3.10/dist-
+packages (from jupyterlab->jupyter->fynesse==0.1.0) (2.1.0)
+Collecting comm>=0.1.1 (from ipykernel->jupyter->fynesse==0.1.0)
+  Downloading comm-0.2.2-py3-none-any.whl.metadata (3.7 kB)
+Requirement already satisfied: debugpy>=1.6.5 in /usr/local/lib/python3.10/dist-
+packages (from ipykernel->jupyter->fynesse==0.1.0) (1.8.0)
+Requirement already satisfied: matplotlib-inline>=0.1 in
+/usr/local/lib/python3.10/dist-packages (from
+ipykernel->jupyter->fynesse==0.1.0) (0.1.7)
+Requirement already satisfied: nest-asyncio in /usr/local/lib/python3.10/dist-
+packages (from ipykernel->jupyter->fynesse==0.1.0) (1.6.0)
+Requirement already satisfied: psutil in /usr/local/lib/python3.10/dist-packages
+(from ipykernel->jupyter->fynesse==0.1.0) (5.9.5)
+Requirement already satisfied: pyzmq>=24 in /usr/local/lib/python3.10/dist-
+packages (from ipykernel->jupyter->fynesse==0.1.0) (24.0.1)
+Requirement already satisfied: beautifulsoup4 in /usr/local/lib/python3.10/dist-
+packages (from nbconvert->jupyter->fynesse==0.1.0) (4.12.3)
+Requirement already satisfied: bleach!=5.0.0 in /usr/local/lib/python3.10/dist-
+packages (from nbconvert->jupyter->fynesse==0.1.0) (6.2.0)
+Requirement already satisfied: defusedxml in /usr/local/lib/python3.10/dist-
+packages (from nbconvert->jupyter->fynesse==0.1.0) (0.7.1)
+Requirement already satisfied: jupyterlab-pygments in
+/usr/local/lib/python3.10/dist-packages (from
+nbconvert->jupyter->fynesse==0.1.0) (0.3.0)
+Requirement already satisfied: markupsafe>=2.0 in
+/usr/local/lib/python3.10/dist-packages (from
+nbconvert->jupyter->fynesse==0.1.0) (3.0.2)
+Requirement already satisfied: mistune<4,>=2.0.3 in
+/usr/local/lib/python3.10/dist-packages (from
+nbconvert->jupyter->fynesse==0.1.0) (3.0.2)
+Requirement already satisfied: nbclient>=0.5.0 in
+/usr/local/lib/python3.10/dist-packages (from
+nbconvert->jupyter->fynesse==0.1.0) (0.10.0)
+Requirement already satisfied: nbformat>=5.7 in /usr/local/lib/python3.10/dist-
+packages (from nbconvert->jupyter->fynesse==0.1.0) (5.10.4)
+Requirement already satisfied: pandocfilters>=1.4.1 in
+/usr/local/lib/python3.10/dist-packages (from
+nbconvert->jupyter->fynesse==0.1.0) (1.5.1)
+Requirement already satisfied: tinycss2 in /usr/local/lib/python3.10/dist-
+packages (from nbconvert->jupyter->fynesse==0.1.0) (1.4.0)
+Requirement already satisfied: argon2-cffi in /usr/local/lib/python3.10/dist-
+packages (from notebook->jupyter->fynesse==0.1.0) (23.1.0)
+Requirement already satisfied: Send2Trash>=1.8.0 in
+/usr/local/lib/python3.10/dist-packages (from notebook->jupyter->fynesse==0.1.0)
+(1.8.3)
+Requirement already satisfied: terminado>=0.8.3 in
+/usr/local/lib/python3.10/dist-packages (from notebook->jupyter->fynesse==0.1.0)
+(0.18.1)
+Requirement already satisfied: prometheus-client in
+/usr/local/lib/python3.10/dist-packages (from notebook->jupyter->fynesse==0.1.0)
+(0.21.0)
+Requirement already satisfied: nbclassic>=0.4.7 in
+/usr/local/lib/python3.10/dist-packages (from notebook->jupyter->fynesse==0.1.0)
+(1.1.0)
+Requirement already satisfied: typing-extensions>=4.0.0 in
+/usr/local/lib/python3.10/dist-packages (from async-
+lru>=1.0.0->jupyterlab->jupyter->fynesse==0.1.0) (4.12.2)
+Requirement already satisfied: webencodings in /usr/local/lib/python3.10/dist-
+packages (from bleach!=5.0.0->nbconvert->jupyter->fynesse==0.1.0) (0.5.1)
+Requirement already satisfied: anyio in /usr/local/lib/python3.10/dist-packages
+(from httpx>=0.25.0->jupyterlab->jupyter->fynesse==0.1.0) (3.7.1)
+Requirement already satisfied: certifi in /usr/local/lib/python3.10/dist-
+packages (from httpx>=0.25.0->jupyterlab->jupyter->fynesse==0.1.0) (2024.8.30)
+Requirement already satisfied: httpcore==1.* in /usr/local/lib/python3.10/dist-
+packages (from httpx>=0.25.0->jupyterlab->jupyter->fynesse==0.1.0) (1.0.7)
+Requirement already satisfied: idna in /usr/local/lib/python3.10/dist-packages
+(from httpx>=0.25.0->jupyterlab->jupyter->fynesse==0.1.0) (3.10)
+Requirement already satisfied: sniffio in /usr/local/lib/python3.10/dist-
+packages (from httpx>=0.25.0->jupyterlab->jupyter->fynesse==0.1.0) (1.3.1)
+Requirement already satisfied: h11<0.15,>=0.13 in
+/usr/local/lib/python3.10/dist-packages (from
+httpcore==1.*->httpx>=0.25.0->jupyterlab->jupyter->fynesse==0.1.0) (0.14.0)
+Collecting jedi>=0.16 (from ipython>=5.0.0->ipykernel->jupyter->fynesse==0.1.0)
+  Downloading jedi-0.19.2-py2.py3-none-any.whl.metadata (22 kB)
+Requirement already satisfied: decorator in /usr/local/lib/python3.10/dist-
+packages (from ipython>=5.0.0->ipykernel->jupyter->fynesse==0.1.0) (4.4.2)
+Requirement already satisfied: pickleshare in /usr/local/lib/python3.10/dist-
+packages (from ipython>=5.0.0->ipykernel->jupyter->fynesse==0.1.0) (0.7.5)
+Requirement already satisfied: backcall in /usr/local/lib/python3.10/dist-
+packages (from ipython>=5.0.0->ipykernel->jupyter->fynesse==0.1.0) (0.2.0)
+Requirement already satisfied: pexpect>4.3 in /usr/local/lib/python3.10/dist-
+packages (from ipython>=5.0.0->ipykernel->jupyter->fynesse==0.1.0) (4.9.0)
+Requirement already satisfied: platformdirs>=2.5 in
+/usr/local/lib/python3.10/dist-packages (from jupyter-
+core->jupyterlab->jupyter->fynesse==0.1.0) (4.3.6)
+Collecting jupyter-client (from jupyter-console->jupyter->fynesse==0.1.0)
+  Downloading jupyter\_client-7.4.9-py3-none-any.whl.metadata (8.5 kB)
+Collecting jupyter-events>=0.9.0 (from jupyter-
+server<3,>=2.4.0->jupyterlab->jupyter->fynesse==0.1.0)
+  Downloading jupyter\_events-0.10.0-py3-none-any.whl.metadata (5.9 kB)
+Collecting jupyter-server-terminals>=0.4.4 (from jupyter-
+server<3,>=2.4.0->jupyterlab->jupyter->fynesse==0.1.0)
+  Downloading jupyter\_server\_terminals-0.5.3-py3-none-any.whl.metadata (5.6 kB)
+Collecting overrides>=5.0 (from jupyter-
+server<3,>=2.4.0->jupyterlab->jupyter->fynesse==0.1.0)
+  Downloading overrides-7.7.0-py3-none-any.whl.metadata (5.8 kB)
+Requirement already satisfied: websocket-client>=1.7 in
+/usr/local/lib/python3.10/dist-packages (from jupyter-
+server<3,>=2.4.0->jupyterlab->jupyter->fynesse==0.1.0) (1.8.0)
+Requirement already satisfied: argon2-cffi-bindings in
+/usr/local/lib/python3.10/dist-packages (from
+argon2-cffi->notebook->jupyter->fynesse==0.1.0) (21.2.0)
+Requirement already satisfied: entrypoints in /usr/local/lib/python3.10/dist-
+packages (from jupyter-client->jupyter-console->jupyter->fynesse==0.1.0) (0.4)
+Requirement already satisfied: babel>=2.10 in /usr/local/lib/python3.10/dist-
+packages (from jupyterlab-
+server<3,>=2.27.1->jupyterlab->jupyter->fynesse==0.1.0) (2.16.0)
+Collecting json5>=0.9.0 (from jupyterlab-
+server<3,>=2.27.1->jupyterlab->jupyter->fynesse==0.1.0)
+  Downloading json5-0.9.28-py3-none-any.whl.metadata (32 kB)
+Requirement already satisfied: jsonschema>=4.18.0 in
+/usr/local/lib/python3.10/dist-packages (from jupyterlab-
+server<3,>=2.27.1->jupyterlab->jupyter->fynesse==0.1.0) (4.23.0)
+Requirement already satisfied: requests>=2.31 in /usr/local/lib/python3.10/dist-
+packages (from jupyterlab-
+server<3,>=2.27.1->jupyterlab->jupyter->fynesse==0.1.0) (2.32.3)
+Requirement already satisfied: fastjsonschema>=2.15 in
+/usr/local/lib/python3.10/dist-packages (from
+nbformat>=5.7->nbconvert->jupyter->fynesse==0.1.0) (2.20.0)
+Requirement already satisfied: wcwidth in /usr/local/lib/python3.10/dist-
+packages (from prompt-toolkit!=3.0.0,!=3.0.1,<3.1.0,>=2.0.0->jupyter-
+console->jupyter->fynesse==0.1.0) (0.2.13)
+Requirement already satisfied: ptyprocess in /usr/local/lib/python3.10/dist-
+packages (from terminado>=0.8.3->notebook->jupyter->fynesse==0.1.0) (0.7.0)
+Requirement already satisfied: soupsieve>1.2 in /usr/local/lib/python3.10/dist-
+packages (from beautifulsoup4->nbconvert->jupyter->fynesse==0.1.0) (2.6)
+Requirement already satisfied: exceptiongroup in /usr/local/lib/python3.10/dist-
+packages (from anyio->httpx>=0.25.0->jupyterlab->jupyter->fynesse==0.1.0)
+(1.2.2)
+Requirement already satisfied: parso<0.9.0,>=0.8.4 in
+/usr/local/lib/python3.10/dist-packages (from
+jedi>=0.16->ipython>=5.0.0->ipykernel->jupyter->fynesse==0.1.0) (0.8.4)
+Requirement already satisfied: attrs>=22.2.0 in /usr/local/lib/python3.10/dist-
+packages (from jsonschema>=4.18.0->jupyterlab-
+server<3,>=2.27.1->jupyterlab->jupyter->fynesse==0.1.0) (24.2.0)
+Requirement already satisfied: jsonschema-specifications>=2023.03.6 in
+/usr/local/lib/python3.10/dist-packages (from jsonschema>=4.18.0->jupyterlab-
+server<3,>=2.27.1->jupyterlab->jupyter->fynesse==0.1.0) (2024.10.1)
+Requirement already satisfied: referencing>=0.28.4 in
+/usr/local/lib/python3.10/dist-packages (from jsonschema>=4.18.0->jupyterlab-
+server<3,>=2.27.1->jupyterlab->jupyter->fynesse==0.1.0) (0.35.1)
+Requirement already satisfied: rpds-py>=0.7.1 in /usr/local/lib/python3.10/dist-
+packages (from jsonschema>=4.18.0->jupyterlab-
+server<3,>=2.27.1->jupyterlab->jupyter->fynesse==0.1.0) (0.21.0)
+Collecting python-json-logger>=2.0.4 (from jupyter-events>=0.9.0->jupyter-
+server<3,>=2.4.0->jupyterlab->jupyter->fynesse==0.1.0)
+  Downloading python\_json\_logger-2.0.7-py3-none-any.whl.metadata (6.5 kB)
+Requirement already satisfied: pyyaml>=5.3 in /usr/local/lib/python3.10/dist-
+packages (from jupyter-events>=0.9.0->jupyter-
+server<3,>=2.4.0->jupyterlab->jupyter->fynesse==0.1.0) (6.0.2)
+Collecting rfc3339-validator (from jupyter-events>=0.9.0->jupyter-
+server<3,>=2.4.0->jupyterlab->jupyter->fynesse==0.1.0)
+  Downloading rfc3339\_validator-0.1.4-py2.py3-none-any.whl.metadata (1.5 kB)
+Collecting rfc3986-validator>=0.1.1 (from jupyter-events>=0.9.0->jupyter-
+server<3,>=2.4.0->jupyterlab->jupyter->fynesse==0.1.0)
+  Downloading rfc3986\_validator-0.1.1-py2.py3-none-any.whl.metadata (1.7 kB)
+Requirement already satisfied: charset-normalizer<4,>=2 in
+/usr/local/lib/python3.10/dist-packages (from requests>=2.31->jupyterlab-
+server<3,>=2.27.1->jupyterlab->jupyter->fynesse==0.1.0) (3.4.0)
+Requirement already satisfied: urllib3<3,>=1.21.1 in
+/usr/local/lib/python3.10/dist-packages (from requests>=2.31->jupyterlab-
+server<3,>=2.27.1->jupyterlab->jupyter->fynesse==0.1.0) (2.2.3)
+Requirement already satisfied: cffi>=1.0.1 in /usr/local/lib/python3.10/dist-
+packages (from argon2-cffi-
+bindings->argon2-cffi->notebook->jupyter->fynesse==0.1.0) (1.17.1)
+Requirement already satisfied: pycparser in /usr/local/lib/python3.10/dist-
+packages (from cffi>=1.0.1->argon2-cffi-
+bindings->argon2-cffi->notebook->jupyter->fynesse==0.1.0) (2.22)
+Collecting fqdn (from jsonschema[format-nongpl]>=4.18.0->jupyter-
+events>=0.9.0->jupyter-server<3,>=2.4.0->jupyterlab->jupyter->fynesse==0.1.0)
+  Downloading fqdn-1.5.1-py3-none-any.whl.metadata (1.4 kB)
+Collecting isoduration (from jsonschema[format-nongpl]>=4.18.0->jupyter-
+events>=0.9.0->jupyter-server<3,>=2.4.0->jupyterlab->jupyter->fynesse==0.1.0)
+  Downloading isoduration-20.11.0-py3-none-any.whl.metadata (5.7 kB)
+Requirement already satisfied: jsonpointer>1.13 in
+/usr/local/lib/python3.10/dist-packages (from jsonschema[format-
+nongpl]>=4.18.0->jupyter-events>=0.9.0->jupyter-
+server<3,>=2.4.0->jupyterlab->jupyter->fynesse==0.1.0) (3.0.0)
+Collecting uri-template (from jsonschema[format-nongpl]>=4.18.0->jupyter-
+events>=0.9.0->jupyter-server<3,>=2.4.0->jupyterlab->jupyter->fynesse==0.1.0)
+  Downloading uri\_template-1.3.0-py3-none-any.whl.metadata (8.8 kB)
+Requirement already satisfied: webcolors>=24.6.0 in
+/usr/local/lib/python3.10/dist-packages (from jsonschema[format-
+nongpl]>=4.18.0->jupyter-events>=0.9.0->jupyter-
+server<3,>=2.4.0->jupyterlab->jupyter->fynesse==0.1.0) (24.11.1)
+Collecting arrow>=0.15.0 (from isoduration->jsonschema[format-
+nongpl]>=4.18.0->jupyter-events>=0.9.0->jupyter-
+server<3,>=2.4.0->jupyterlab->jupyter->fynesse==0.1.0)
+  Downloading arrow-1.3.0-py3-none-any.whl.metadata (7.5 kB)
+Collecting types-python-dateutil>=2.8.10 (from
+arrow>=0.15.0->isoduration->jsonschema[format-nongpl]>=4.18.0->jupyter-
+events>=0.9.0->jupyter-server<3,>=2.4.0->jupyterlab->jupyter->fynesse==0.1.0)
+  Downloading types\_python\_dateutil-2.9.0.20241003-py3-none-any.whl.metadata
+(1.9 kB)
+Downloading jupyter-1.1.1-py2.py3-none-any.whl (2.7 kB)
+Downloading jupyterlab-4.3.1-py3-none-any.whl (11.7 MB)
+   \textcolor{ansi-black-intense}{━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━} \textcolor{ansi-green}{11.7/11.7 MB}
+\textcolor{ansi-red}{41.8 MB/s} eta \textcolor{ansi-cyan}{0:00:00}
+Downloading ipykernel-6.29.5-py3-none-any.whl (117 kB)
+   \textcolor{ansi-black-intense}{━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━} \textcolor{ansi-green}{117.2/117.2 kB}
+\textcolor{ansi-red}{8.9 MB/s} eta \textcolor{ansi-cyan}{0:00:00}
+Downloading async\_lru-2.0.4-py3-none-any.whl (6.1 kB)
+Downloading comm-0.2.2-py3-none-any.whl (7.2 kB)
+Downloading jupyter\_lsp-2.2.5-py3-none-any.whl (69 kB)
+   \textcolor{ansi-black-intense}{━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━} \textcolor{ansi-green}{69.1/69.1 kB}
+\textcolor{ansi-red}{4.1 MB/s} eta \textcolor{ansi-cyan}{0:00:00}
+Downloading jupyter\_server-2.14.2-py3-none-any.whl (383 kB)
+   \textcolor{ansi-black-intense}{━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━} \textcolor{ansi-green}{383.6/383.6 kB}
+\textcolor{ansi-red}{18.1 MB/s} eta \textcolor{ansi-cyan}{0:00:00}
+Downloading jupyter\_client-7.4.9-py3-none-any.whl (133 kB)
+   \textcolor{ansi-black-intense}{━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━} \textcolor{ansi-green}{133.5/133.5 kB}
+\textcolor{ansi-red}{8.3 MB/s} eta \textcolor{ansi-cyan}{0:00:00}
+Downloading jupyterlab\_server-2.27.3-py3-none-any.whl (59 kB)
+   \textcolor{ansi-black-intense}{━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━} \textcolor{ansi-green}{59.7/59.7 kB}
+\textcolor{ansi-red}{4.3 MB/s} eta \textcolor{ansi-cyan}{0:00:00}
+Downloading jedi-0.19.2-py2.py3-none-any.whl (1.6 MB)
+   \textcolor{ansi-black-intense}{━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━} \textcolor{ansi-green}{1.6/1.6 MB}
+\textcolor{ansi-red}{39.4 MB/s} eta \textcolor{ansi-cyan}{0:00:00}
+Downloading json5-0.9.28-py3-none-any.whl (30 kB)
+Downloading jupyter\_events-0.10.0-py3-none-any.whl (18 kB)
+Downloading jupyter\_server\_terminals-0.5.3-py3-none-any.whl (13 kB)
+Downloading overrides-7.7.0-py3-none-any.whl (17 kB)
+Downloading python\_json\_logger-2.0.7-py3-none-any.whl (8.1 kB)
+Downloading rfc3986\_validator-0.1.1-py2.py3-none-any.whl (4.2 kB)
+Downloading rfc3339\_validator-0.1.4-py2.py3-none-any.whl (3.5 kB)
+Downloading fqdn-1.5.1-py3-none-any.whl (9.1 kB)
+Downloading isoduration-20.11.0-py3-none-any.whl (11 kB)
+Downloading uri\_template-1.3.0-py3-none-any.whl (11 kB)
+Downloading arrow-1.3.0-py3-none-any.whl (66 kB)
+   \textcolor{ansi-black-intense}{━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━} \textcolor{ansi-green}{66.4/66.4 kB}
+\textcolor{ansi-red}{3.3 MB/s} eta \textcolor{ansi-cyan}{0:00:00}
+Downloading types\_python\_dateutil-2.9.0.20241003-py3-none-any.whl (9.7 kB)
+Building wheels for collected packages: fynesse
+  Building wheel for fynesse (setup.py) {\ldots} done
+  Created wheel for fynesse: filename=fynesse-0.1.0-py3-none-any.whl size=9063
+sha256=9abf2e0d01663158936b5ff4430f983e3616d798fbfbaa9c92aa7cc933854aa5
+  Stored in directory: /tmp/pip-ephem-wheel-cache-
+bi3b7ctl/wheels/b1/37/a1/82ff50d7504da47ae790f79d9d0fc4ba1772f938d6d4c7d7ff
+Successfully built fynesse
+Installing collected packages: uri-template, types-python-dateutil,
+rfc3986-validator, rfc3339-validator, python-json-logger, overrides, json5,
+jedi, fqdn, comm, async-lru, jupyter-server-terminals, jupyter-client, arrow,
+isoduration, ipykernel, jupyter-events, jupyter-server, jupyterlab-server,
+jupyter-lsp, jupyterlab, jupyter, fynesse
+  Attempting uninstall: jupyter-client
+    Found existing installation: jupyter-client 6.1.12
+    Uninstalling jupyter-client-6.1.12:
+      Successfully uninstalled jupyter-client-6.1.12
+  Attempting uninstall: ipykernel
+    Found existing installation: ipykernel 5.5.6
+    Uninstalling ipykernel-5.5.6:
+      Successfully uninstalled ipykernel-5.5.6
+  Attempting uninstall: jupyter-server
+    Found existing installation: jupyter-server 1.24.0
+    Uninstalling jupyter-server-1.24.0:
+      Successfully uninstalled jupyter-server-1.24.0
+\textcolor{ansi-red}{ERROR: pip's dependency resolver does not currently take into account all
+the packages that are installed. This behaviour is the source of the following
+dependency conflicts.
+google-colab 1.0.0 requires ipykernel==5.5.6, but you have ipykernel 6.29.5
+which is incompatible.}\textcolor{ansi-red}{
+}Successfully installed arrow-1.3.0 async-lru-2.0.4 comm-0.2.2 fqdn-1.5.1
+fynesse-0.1.0 ipykernel-6.29.5 isoduration-20.11.0 jedi-0.19.2 json5-0.9.28
+jupyter-1.1.1 jupyter-client-7.4.9 jupyter-events-0.10.0 jupyter-lsp-2.2.5
+jupyter-server-2.14.2 jupyter-server-terminals-0.5.3 jupyterlab-4.3.1
+jupyterlab-server-2.27.3 overrides-7.7.0 python-json-logger-2.0.7
+rfc3339-validator-0.1.4 rfc3986-validator-0.1.1 types-python-
+dateutil-2.9.0.20241003 uri-template-1.3.0
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZpc{}}\PY{k}{pip} install pymysql
+\PY{k+kn}{import} \PY{n+nn}{fynesse}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Requirement already satisfied: pymysql in /usr/local/lib/python3.10/dist-
+packages (1.1.1)
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Your code here}
+
+\PY{n}{i} \PY{o}{=} \PY{l+m+mi}{37}
+\PY{k}{if} \PY{n}{i} \PY{o}{\PYZlt{}} \PY{l+m+mi}{10}\PY{p}{:}
+     \PY{n}{filenum} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{0}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{i}\PY{p}{)}
+\PY{k}{else}\PY{p}{:}
+     \PY{n}{filenum} \PY{o}{=} \PY{n+nb}{str}\PY{p}{(}\PY{n}{i}\PY{p}{)}
+\PY{n}{file} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TS0}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{filenum}
+\PY{n}{fynesse}\PY{o}{.}\PY{n}{access}\PY{o}{.}\PY{n}{download\PYZus{}census\PYZus{}data}\PY{p}{(}\PY{n}{file}\PY{p}{)} \PY{c+c1}{\PYZsh{} Age by single year of age}
+
+\PY{n}{age\PYZus{}df} \PY{o}{=} \PY{n}{fynesse}\PY{o}{.}\PY{n}{access}\PY{o}{.}\PY{n}{load\PYZus{}census\PYZus{}data}\PY{p}{(}\PY{n}{file}\PY{p}{,} \PY{n}{level}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ltla}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} Preparing the columns we want}
+\PY{c+c1}{\PYZsh{}age\PYZus{}df = age\PYZus{}df.drop(age\PYZus{}df.columns[[0,2,3,4,10,16,23,28,34,45,61,77,88,99,115]], axis=1).set\PYZus{}index(\PYZsq{}geography\PYZsq{})}
+\PY{c+c1}{\PYZsh{}age\PYZus{}df.columns = range(100)}
+\PY{n}{age\PYZus{}df}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Files extracted to: census2021-ts037
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+     date             geography geography code  \textbackslash{}
+0    2021            Hartlepool      E06000001
+1    2021         Middlesbrough      E06000002
+2    2021  Redcar and Cleveland      E06000003
+3    2021      Stockton-on-Tees      E06000004
+4    2021            Darlington      E06000005
+..    {\ldots}                   {\ldots}            {\ldots}
+326  2021               Torfaen      W06000020
+327  2021         Monmouthshire      W06000021
+328  2021               Newport      W06000022
+329  2021                 Powys      W06000023
+330  2021        Merthyr Tydfil      W06000024
+
+     General health: Total: All usual residents  \textbackslash{}
+0                                         92338
+1                                        143924
+2                                        136531
+3                                        196595
+4                                        107800
+..                                          {\ldots}
+326                                       92276
+327                                       92955
+328                                      159592
+329                                      133169
+330                                       58839
+
+     General health: Very good health  General health: Good health  \textbackslash{}
+0                               39817                        30749
+1                               67207                        46382
+2                               58085                        46416
+3                               91479                        65521
+4                               48749                        37324
+..                                {\ldots}                          {\ldots}
+326                             39335                        31301
+327                             43165                        31887
+328                             74351                        52689
+329                             59313                        45946
+330                             26718                        17786
+
+     General health: Fair health  General health: Bad health  \textbackslash{}
+0                          14415                        5625
+1                          19821                        7969
+2                          21633                        7916
+3                          27307                        9392
+4                          15383                        5016
+..                           {\ldots}                         {\ldots}
+326                        14340                        5584
+327                        12655                        4060
+328                        21937                        8159
+329                        20078                        6040
+330                         8837                        4112
+
+     General health: Very bad health
+0                               1732
+1                               2545
+2                               2481
+3                               2896
+4                               1328
+..                               {\ldots}
+326                             1716
+327                             1188
+328                             2456
+329                             1792
+330                             1386
+
+[331 rows x 9 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} tags = \PYZob{}}
+\PY{c+c1}{\PYZsh{}     \PYZdq{}amenity\PYZdq{}: True,}
+\PY{c+c1}{\PYZsh{}     \PYZdq{}buildings\PYZdq{}: True,}
+\PY{c+c1}{\PYZsh{}     \PYZdq{}historic\PYZdq{}: True,}
+\PY{c+c1}{\PYZsh{}     \PYZdq{}leisure\PYZdq{}: True,}
+\PY{c+c1}{\PYZsh{}     \PYZdq{}shop\PYZdq{}: True,}
+\PY{c+c1}{\PYZsh{}     \PYZdq{}tourism\PYZdq{}: True,}
+\PY{c+c1}{\PYZsh{}     \PYZdq{}religion\PYZdq{}: True,}
+\PY{c+c1}{\PYZsh{}     \PYZdq{}memorial\PYZdq{}: True}
+\PY{c+c1}{\PYZsh{} \PYZcb{}}
+\PY{n}{tags} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{healthcare}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{\PYZcb{}}
+\PY{n}{pois} \PY{o}{=} \PY{n}{fynesse}\PY{o}{.}\PY{n}{assess}\PY{o}{.}\PY{n}{pois\PYZus{}from\PYZus{}coordinates}\PY{p}{(}\PY{l+m+mf}{52.1951}\PY{p}{,} \PY{l+m+mf}{0.1313}\PY{p}{,} \PY{n}{tags}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{pois}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                                                              geometry  \textbackslash{}
+element id
+node    20826740                              POINT (0.13398 52.20143)
+        298844674                             POINT (0.12936 52.19687)
+        598110080                             POINT (0.12643 52.20061)
+        735025371                             POINT (0.12703 52.19522)
+        762014629                             POINT (0.13753 52.20466)
+        1477613081                            POINT (0.13587 52.20469)
+        1481568930                            POINT (0.13239 52.19808)
+        1821391137                              POINT (0.13238 52.192)
+        7906456785                            POINT (0.12218 52.19841)
+        8923220125                            POINT (0.13554 52.19806)
+        11516645547                           POINT (0.13622 52.19302)
+        11642499899                           POINT (0.13519 52.18923)
+        12046569957                           POINT (0.12708 52.19941)
+        12046569964                           POINT (0.12685 52.19967)
+way     134800787    POLYGON ((0.12449 52.19853, 0.12457 52.19835, {\ldots}
+        134805844    POLYGON ((0.12957 52.19739, 0.12966 52.19743, {\ldots}
+        134806811    POLYGON ((0.13053 52.19636, 0.13061 52.19628, {\ldots}
+        134806826    POLYGON ((0.13104 52.19656, 0.1311 52.19659, 0{\ldots}
+        135033202    POLYGON ((0.13559 52.20064, 0.13553 52.20059, {\ldots}
+        672500310    POLYGON ((0.12405 52.19043, 0.1243 52.19047, 0{\ldots}
+
+                     addr:city addr:housenumber addr:postcode  \textbackslash{}
+element id
+node    20826740     Cambridge               25       CB1 2AB
+        298844674    Cambridge               50       CB2 1LA
+        598110080    Cambridge               71       CB2 1AB
+        735025371          NaN              NaN           NaN
+        762014629    Cambridge               24       CB1 2LF
+        1477613081   Cambridge               47       CB1 2LD
+        1481568930   Cambridge               45       CB1 2HA
+        1821391137   Cambridge                7       CB2 8BB
+        7906456785   Cambridge                3       CB2 1QA
+        8923220125   Cambridge               73       CB1 2DG
+        11516645547  Cambridge               25           NaN
+        11642499899        NaN              NaN           NaN
+        12046569957  Cambridge              114       CB2 1DP
+        12046569964  Cambridge              102       CB2 1DP
+way     134800787    Cambridge               48       CB2 1EH
+        134805844          NaN              19e       CB2 1NW
+        134806811    Cambridge               41       CB2 1NT
+        134806826    Cambridge               41       CB2 1NT
+        135033202    Cambridge               56       CB1 2AS
+        672500310    Cambridge              2-4       CB2 8AF
+
+                            addr:street   amenity        healthcare  \textbackslash{}
+element id
+node    20826740              Mill Road   doctors            doctor
+        298844674            Hills Road  pharmacy          pharmacy
+        598110080         Regent Street       NaN  cosmetic\_surgery
+        735025371                   NaN   doctors            doctor
+        762014629        Norfolk Street   dentist           dentist
+        1477613081       Norfolk Street       NaN       alternative
+        1481568930         Glisson Road   dentist           dentist
+        1821391137    Brooklands Avenue   doctors            doctor
+        7906456785   Trumpington Street   dentist           dentist
+        8923220125         Tenison Road       NaN        podiatrist
+        11516645547       Station Place   dentist           dentist
+        11642499899                 NaN   dentist           dentist
+        12046569957       Regent Street   dentist           dentist
+        12046569964       Regent Street   dentist           dentist
+way     134800787        Lensfield Road   doctors            doctor
+        134805844            Hills Road   dentist           dentist
+        134806811            Hills Road    clinic            clinic
+        134806826            Hills Road    clinic            clinic
+        135033202             Mill Road  pharmacy          pharmacy
+        672500310      Trumpington Road  hospital          hospital
+
+                                                       name             phone  \textbackslash{}
+element id
+node    20826740               Petersfield Medical Practice   +44 1223 350647
+        298844674                G.F.T. Davis \& Co Pharmacy               NaN
+        598110080                          BodyLaser Clinic               NaN
+        735025371                         Woodlands Surgery               NaN
+        762014629             Norfolk Street Dental Surgery   +44 1223 358884
+        1477613081                   Salus Wellness Clinics               NaN
+        1481568930                         Bupa Dental Care               NaN
+        1821391137            Cambridge Skin \& Laser Clinic    +44 1223362226
+        7906456785             Trumpington Street Dentistry     +441223367870
+        8923220125                    Cutting Edge Podiatry               NaN
+        11516645547                                     NaN               NaN
+        11642499899                        Cambridge Clinic               NaN
+        12046569957                            ToothStation   +44 1223 324524
+        12046569964                  Regent Dental Practice               NaN
+way     134800787                Lensfield Medical Practice   +44 1223 651020
+        134805844                     St Paul's Dental Care               NaN
+        134806811    Beechwood Complementary Medical Centre               NaN
+        134806826                         The Travel Clinic               NaN
+        135033202                      Petersfield Pharmacy   +44 1223 354383
+        672500310        Nuffield Health Cambridge Hospital  +44 1223 370 922
+
+                                                               website  {\ldots}  \textbackslash{}
+element id                                                              {\ldots}
+node    20826740         https://www.petersfieldmedicalpractice.co.uk/  {\ldots}
+        298844674    https://www.alphega-pharmacy.co.uk/pharmacy/ca{\ldots}  {\ldots}
+        598110080                                                  NaN  {\ldots}
+        735025371                                                  NaN  {\ldots}
+        762014629                                                  NaN  {\ldots}
+        1477613081                                                 NaN  {\ldots}
+        1481568930                                                 NaN  {\ldots}
+        1821391137                              www.cambridgelaser.com  {\ldots}
+        7906456785        https://www.trumpingtonstreetdentistry.co.uk  {\ldots}
+        8923220125              https://www.cuttingedgepodiatry.co.uk/  {\ldots}
+        11516645547                      https://www.wellohello.co.uk/  {\ldots}
+        11642499899                                                NaN  {\ldots}
+        12046569957                    https://www.toothstation.co.uk/  {\ldots}
+        12046569964                                                NaN  {\ldots}
+way     134800787                       https://lensfieldpractice.org/  {\ldots}
+        134805844                                                  NaN  {\ldots}
+        134806811              https://www.thebeechwoodpractice.co.uk/  {\ldots}
+        134806826                                                  NaN  {\ldots}
+        135033202                                                  NaN  {\ldots}
+        672500310    https://www.nuffieldhealth.com/hospitals/cambr{\ldots}  {\ldots}
+
+                                                       contact:website  \textbackslash{}
+element id
+node    20826740                                                   NaN
+        298844674                                                  NaN
+        598110080                                                  NaN
+        735025371                                                  NaN
+        762014629                                                  NaN
+        1477613081                                                 NaN
+        1481568930   https://www.bupa.co.uk/dental/dental-care/prac{\ldots}
+        1821391137                                                 NaN
+        7906456785                                                 NaN
+        8923220125                                                 NaN
+        11516645547                                                NaN
+        11642499899                                                NaN
+        12046569957                                                NaN
+        12046569964                                                NaN
+way     134800787                                                  NaN
+        134805844                                                  NaN
+        134806811                                                  NaN
+        134806826                                                  NaN
+        135033202                                                  NaN
+        672500310                                                  NaN
+
+                     source              operator    building building:levels  \textbackslash{}
+element id
+node    20826740        NaN                   NaN         NaN             NaN
+        298844674       NaN                   NaN         NaN             NaN
+        598110080       NaN                   NaN         NaN             NaN
+        735025371       NaN                   NaN         NaN             NaN
+        762014629       NaN                   NaN         NaN             NaN
+        1477613081      NaN                   NaN         NaN             NaN
+        1481568930      NaN                   NaN         NaN             NaN
+        1821391137   survey                   NaN         NaN             NaN
+        7906456785      NaN  Antwerp Dental Group         NaN             NaN
+        8923220125      NaN                   NaN         NaN             NaN
+        11516645547     NaN                   NaN         NaN             NaN
+        11642499899     NaN                   NaN         NaN             NaN
+        12046569957     NaN                   NaN         NaN             NaN
+        12046569964     NaN                   NaN         NaN             NaN
+way     134800787       NaN                   NaN         yes             NaN
+        134805844       NaN                   NaN         yes             NaN
+        134806811       NaN                   NaN         yes             NaN
+        134806826       NaN                   NaN         yes             NaN
+        135033202       NaN                   NaN  commercial               2
+        672500310       NaN       Nuffield Health         NaN             NaN
+
+                    dispensing emergency ref:university\_of\_cambridge  \textbackslash{}
+element id
+node    20826740           NaN       NaN                         NaN
+        298844674          NaN       NaN                         NaN
+        598110080          NaN       NaN                         NaN
+        735025371          NaN       NaN                         NaN
+        762014629          NaN       NaN                         NaN
+        1477613081         NaN       NaN                         NaN
+        1481568930         NaN       NaN                         NaN
+        1821391137         NaN       NaN                         NaN
+        7906456785         NaN       NaN                         NaN
+        8923220125         NaN       NaN                         NaN
+        11516645547        NaN       NaN                         NaN
+        11642499899        NaN       NaN                         NaN
+        12046569957        NaN       NaN                         NaN
+        12046569964        NaN       NaN                         NaN
+way     134800787          NaN       NaN                         NaN
+        134805844          NaN       NaN                         NaN
+        134806811          NaN       NaN                         NaN
+        134806826          NaN       NaN                         NaN
+        135033202          yes       NaN                         NaN
+        672500310          NaN        no                         yes
+
+                      wikidata                              wikipedia
+element id
+node    20826740           NaN                                    NaN
+        298844674          NaN                                    NaN
+        598110080          NaN                                    NaN
+        735025371          NaN                                    NaN
+        762014629          NaN                                    NaN
+        1477613081         NaN                                    NaN
+        1481568930         NaN                                    NaN
+        1821391137         NaN                                    NaN
+        7906456785         NaN                                    NaN
+        8923220125         NaN                                    NaN
+        11516645547        NaN                                    NaN
+        11642499899        NaN                                    NaN
+        12046569957        NaN                                    NaN
+        12046569964        NaN                                    NaN
+way     134800787          NaN                                    NaN
+        134805844          NaN                                    NaN
+        134806811          NaN                                    NaN
+        134806826          NaN                                    NaN
+        135033202          NaN                                    NaN
+        672500310    Q42851410  en:Nuffield Health Cambridge Hospital
+
+[20 rows x 29 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{download\PYZus{}census\PYZus{}coord\PYZus{}data}\PY{p}{(}\PY{n}{base\PYZus{}dir}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+    \PY{n}{url} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{https://open\PYZhy{}geography\PYZhy{}portalx\PYZhy{}ons.hub.arcgis.com/api/download/v1/items/6beafcfd9b9c4c9993a06b6b199d7e6d/csv?layers=0}\PY{l+s+s2}{\PYZdq{}}
+    \PY{n}{extract\PYZus{}dir} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{base\PYZus{}dir}\PY{p}{,} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{splitext}\PY{p}{(}\PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{basename}\PY{p}{(}\PY{n}{url}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+
+    \PY{k}{if} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{exists}\PY{p}{(}\PY{n}{extract\PYZus{}dir}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{File already exists at: }\PY{l+s+si}{\PYZob{}}\PY{n}{extract\PYZus{}dir}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{k}{return}
+
+    \PY{n}{os}\PY{o}{.}\PY{n}{makedirs}\PY{p}{(}\PY{n}{extract\PYZus{}dir}\PY{p}{,} \PY{n}{exist\PYZus{}ok}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+    \PY{n}{response} \PY{o}{=} \PY{n}{requests}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{n}{url}\PY{p}{)}
+    \PY{n}{response}\PY{o}{.}\PY{n}{raise\PYZus{}for\PYZus{}status}\PY{p}{(}\PY{p}{)}
+
+    \PY{n}{csv\PYZus{}file\PYZus{}path} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{extract\PYZus{}dir}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{census\PYZus{}coord.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{n}{csv\PYZus{}file\PYZus{}path}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{wb}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{file}\PY{p}{:}
+        \PY{n}{file}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{n}{response}\PY{o}{.}\PY{n}{content}\PY{p}{)}
+
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{File downloaded and saved to: }\PY{l+s+si}{\PYZob{}}\PY{n}{csv\PYZus{}file\PYZus{}path}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+
+\PY{n}{download\PYZus{}census\PYZus{}coord\PYZus{}data}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+File downloaded and saved to: csv?layers=0/census\_coord.csv
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{decomposition} \PY{k+kn}{import} \PY{n}{PCA}
+
+\PY{c+c1}{\PYZsh{} Example synthetic coordinates (x, y)}
+\PY{n}{coordinates} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}
+    \PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{]}\PY{p}{,}
+    \PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{]}\PY{p}{,}
+    \PY{p}{[}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{]}\PY{p}{,}
+    \PY{p}{[}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{]}\PY{p}{,}
+    \PY{p}{[}\PY{l+m+mi}{6}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{]}\PY{p}{,}
+    \PY{p}{[}\PY{l+m+mi}{7}\PY{p}{,} \PY{l+m+mi}{12}\PY{p}{]}\PY{p}{,}
+    \PY{p}{[}\PY{l+m+mi}{8}\PY{p}{,} \PY{l+m+mi}{15}\PY{p}{]}
+\PY{p}{]}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Perform PCA}
+\PY{n}{pca} \PY{o}{=} \PY{n}{PCA}\PY{p}{(}\PY{n}{n\PYZus{}components}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{pca}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{coordinates}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Transformed coordinates (projected onto the principal components)}
+\PY{n}{transformed} \PY{o}{=} \PY{n}{pca}\PY{o}{.}\PY{n}{transform}\PY{p}{(}\PY{n}{coordinates}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Extract PC1 (most important direction)}
+\PY{n}{pc1} \PY{o}{=} \PY{n}{pca}\PY{o}{.}\PY{n}{components\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} Plot the original coordinates}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{coordinates}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{coordinates}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{blue}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Original Coordinates}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Plot the direction of PC1}
+\PY{n}{pc1\PYZus{}origin} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{coordinates}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}  \PY{c+c1}{\PYZsh{} Mean to center the vector}
+\PY{n}{plt}\PY{o}{.}\PY{n}{quiver}\PY{p}{(}\PY{n}{pc1\PYZus{}origin}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{pc1\PYZus{}origin}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{pc1}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{pc1}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{angles}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{xy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{scale\PYZus{}units}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{xy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{scale}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{red}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Principal Component 1 (PC1)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Plot the transformed coordinates (PC1 projection)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{transformed}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{transformed}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{green}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Projected onto PC1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Customize the plot}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PCA on Coordinates}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X Coordinate}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y Coordinate}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{axis}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{equal}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{ads_course_assessment_files/ads_course_assessment_19_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Write a short paragraph summarising what you did in the Access stage.
+
+    \subsection{Assess}\label{assess}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+    Write a short paragraph summarising what you did in the Assess stage.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} TODO: your answer here}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \subsection{Address}\label{address}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{estimate\PYZus{}students}\PY{p}{(}\PY{n}{latitude}\PY{p}{:} \PY{n+nb}{float}\PY{p}{,} \PY{n}{longitude}\PY{p}{:} \PY{n+nb}{float}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{float}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Args:}
+\PY{l+s+sd}{    latitude (float): The latitude coordinate.}
+\PY{l+s+sd}{    longitude (float): The longitude coordinate.}
+
+\PY{l+s+sd}{    Returns:}
+\PY{l+s+sd}{    float: Estimated share of students in that area (value between 0 and 1).}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{c+c1}{\PYZsh{} TODO: implement}
+    \PY{k}{return} \PY{n+ne}{NotImplementedError}
+
+
+\PY{k}{def} \PY{n+nf}{estimate\PYZus{}something}\PY{p}{(}\PY{n}{latitude}\PY{p}{:} \PY{n+nb}{float}\PY{p}{,} \PY{n}{longitude}\PY{p}{:} \PY{n+nb}{float}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{float}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{}TODO: rename function}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Args:}
+\PY{l+s+sd}{    latitude (float): The latitude coordinate.}
+\PY{l+s+sd}{    longitude (float): The longitude coordinate.}
+
+\PY{l+s+sd}{    Returns:}
+\PY{l+s+sd}{    float: Estimated value, percentage, probability, etc}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{c+c1}{\PYZsh{} TODO: implement}
+    \PY{k}{return} \PY{n+ne}{NotImplementedError}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Write a short paragraph summarising what you did in the Address stage.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} TODO: your answer here}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \subsection{Discussion}\label{discussion}
+
+    \paragraph{Story and structure}\label{story-and-structure}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Marks awarded for inline explanation and structure, no need for answers here. Go over your notebook to make sure you explain what you did and why.}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \paragraph{Design decisions}\label{design-decisions}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} TODO: your answer here}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \paragraph{Comparison}\label{comparison}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} TODO: your answer here}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \paragraph{Reusability}\label{reusability}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} TODO: your answer here}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \section{Task 2: miniproject (13
+marks)}\label{task-2-miniproject-13-marks}
+
+    We expect your miniproject to be more advanced than the example project,
+and that's why we allocated more marks to it. The first 7 marks will be
+allocated similarly to Task 1.
+
+6 remaining points are \emph{bonus} - they will be allocated for going
+far beyond what you did in Task 1, either in data access, assess,
+address or story.
+
+    \paragraph{Choosing your topic}\label{choosing-your-topic}
+
+You are given a lot of flexibility in choosing a miniproject topic.
+
+Some hints: - Your project should be based on the Census, Price Paid,
+OSM and Election datasets. - It's a good idea to pick something that you
+are interested in. - Bear in mind there are no marks dedicated to your
+overall prediction accuracy, so there is no advantage to picking `easy'
+topics. It is perfectly ok to not reach significant predictive power, as
+long as you followed the proper process.
+
+Some guidelines: - Do not make a miniproject that furthers
+discriminatory rhetoric. In general, avoid topics that could be
+insensitive. If in doubt, message Radzim Sendyka (and \emph{cc}
+Christian Cabrera) to discuss if this applies to your idea. - Please
+avoid any projects that would require approval from the ethics comittee.
+- Pick the scope of your projects that will allow you to show your
+skills. Some projects might not be challenging enough while others might
+be hard to make any progress in. Don't be scared to report negative
+results.
+
+Please email Radzim Sendyka (and \emph{cc} Christian Cabrera) with your
+project idea when you begin working on it, so we can let you know about
+any potential concerns (eg. potentially insensive, too off-topic, too
+simple, too complex) as soon as we can. You can change the topic up to
+the submission deadline, but let us know again in cases of major
+changes.
+
+    Most of the advice from Task 1 still applies, particularly around using
+an online relational database, structuring your notebook, fynesse,
+access-assess-address, data readiness levels, hints.
+
+    Sources you may want to include in your data include:
+
+\begin{itemize}
+\tightlist
+\item
+  UK Census Data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    UK Census 2021 data
+    \href{https://www.ons.gov.uk/search?topics=9731,6646,3845,9497,4262,4128,7755,4994,6885,9724,7367&filter=datasets}{here}
+    or \href{https://www.nomisweb.co.uk/sources/census_2021_bulk}{here}.
+  \item
+    Historical Census data
+    \href{https://www.ons.gov.uk/census/historiccensusdata}{here}.
+  \item
+    Geographic coordinates of Census Output Areas
+    \href{https://www.data.gov.uk/dataset/4d4e021d-fe98-4a0e-88e2-3ead84538537/output-areas-december-2021-boundaries-ew-bgc-v2}{here}.
+  \end{itemize}
+\item
+  Spatial data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You should already have a connection to OpenStreetMaps.
+  \item
+    You might want to also download the entire map for England (or more)
+    \href{https://download.openstreetmap.fr/extracts/}{here} or
+    \href{https://wiki.openstreetmap.org/wiki/Planet.osm}{here}.
+  \end{itemize}
+\item
+  Election data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Recent Election Results data
+    \href{https://commonslibrary.parliament.uk/research-briefings/cbp-10009/}{here}
+  \item
+    Historical Election Results data
+    \href{https://commonslibrary.parliament.uk/research-briefings/cbp-8647/\#fullreport}{here}.
+  \item
+    Lookup reference between Output Areas and Parliamentary
+    Constituencies
+    \href{https://geoportal.statistics.gov.uk/datasets/5968b5b2c0f14dd29ba277beaae6dec3_0/explore}{here}.
+  \end{itemize}
+\item
+  Price Paid Data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You should have this data already in your database.
+  \end{itemize}
+\item
+  OSM
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You should know how to access this data from previous practicals.
+  \end{itemize}
+\end{itemize}
+
+    Example ideas:
+
+\begin{itemize}
+\tightlist
+\item
+  Are areas correlated in terms of census results? If so, find the areas
+  that are leading change, and the ones that are following.
+\item
+  Which historical census variables used to predict election results in
+  the past, but don't seem related anymore?
+\item
+  Census results are only updated once a decade, but new roads and
+  houses are built every year. Can census results, for example those
+  relating to travel, be predicted from basic map information, such as
+  street networks?
+\item
+  Building new houses is our best way of tackling the housing crisis.
+  Use the information on new builds in the house prices dataset to
+  explore what factors drive new developments, and make predictions for
+  where the next houses will be built.
+\item
+  House styles differ a lot between regions and inhabitants. Can you
+  make any predictions about the house or area simply from looking at
+  it's geometric shape and orientation?
+\end{itemize}
+
+Note that the ideas are just a starting point question. You should
+include more in-depth investigations into the data, validate your
+findings where applicable, and prepare visualisations.
+
+    \subsection{Title and description}\label{title-and-description}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} TODO: title your miniproject}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} TODO: provide a very brief description of the goals of your miniproject}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \subsection{TODO: Your Project Goes
+Here}\label{todo-your-project-goes-here}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+    \subsection{Conclusions}\label{conclusions}
+
+The below code is for marking purpuses only, and not part of your
+project. It helps us gather the data we need without asking you for
+database credentials, and scouring github pages. This is mandatory. If
+the code does not work for you, let us know immediately.
+
+    \begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\tightlist
+\item
+  Please re-run the code from Practical 1 to help us see the contents of
+  your database. We recommend you include all data sources there, but
+  some smaller inputs are fine to use as files.
+\end{enumerate}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{tables} \PY{o}{=} \PY{o}{\PYZpc{}}\PY{k}{sql} SHOW TABLES;
+
+\PY{k}{for} \PY{n}{row} \PY{o+ow}{in} \PY{n}{tables}\PY{p}{:}
+    \PY{n}{table\PYZus{}name} \PY{o}{=} \PY{n}{row}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{Table: }\PY{l+s+si}{\PYZob{}}\PY{n}{table\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+    \PY{n}{table\PYZus{}status} \PY{o}{=} \PY{o}{\PYZpc{}}\PY{k}{sql} SHOW TABLE STATUS LIKE \PYZsq{}\PYZob{}table\PYZus{}name\PYZcb{}\PYZsq{};
+    \PY{n}{approx\PYZus{}row\PYZus{}count} \PY{o}{=} \PY{n}{table\PYZus{}status}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]} \PY{k}{if} \PY{n}{table\PYZus{}status} \PY{k}{else} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Unable to fetch row count}\PY{l+s+s1}{\PYZsq{}}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{Approx Row Count:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{approx\PYZus{}row\PYZus{}count}\PY{o}{/}\PY{o}{/}\PY{l+m+mi}{100000}\PY{o}{/}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+    \PY{n}{first\PYZus{}5\PYZus{}rows} \PY{o}{=} \PY{o}{\PYZpc{}}\PY{k}{sql} SELECT * FROM `\PYZob{}table\PYZus{}name\PYZcb{}` LIMIT 5;
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{first\PYZus{}5\PYZus{}rows}\PY{p}{)}
+
+    \PY{n}{indices} \PY{o}{=} \PY{o}{\PYZpc{}}\PY{k}{sql} SHOW INDEX FROM `\PYZob{}table\PYZus{}name\PYZcb{}`;
+    \PY{k}{if} \PY{n}{indices}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{Indices:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{k}{for} \PY{n}{index} \PY{o+ow}{in} \PY{n}{indices}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ \PYZhy{} }\PY{l+s+si}{\PYZob{}}\PY{n}{index}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ (}\PY{l+s+si}{\PYZob{}}\PY{n}{index}\PY{p}{[}\PY{l+m+mi}{10}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{): Column }\PY{l+s+si}{\PYZob{}}\PY{n}{index}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{k}{else}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{No indices set on this table.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Please paste a link to your fynesse library below, and make sure it's
+  publically accessible. Also run the code below, and make sure it
+  worked, printing out the contents of your library.
+\end{enumerate}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fynesse\PYZus{}url} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZlt{}your\PYZhy{}url\PYZhy{}library\PYZhy{}here\PYZgt{}}\PY{l+s+s1}{\PYZsq{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{fynesse}
+\PY{k+kn}{import} \PY{n+nn}{os}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FYNESSE STRUCTURE:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{package\PYZus{}path} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{dirname}\PY{p}{(}\PY{n}{fynesse}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}file\PYZus{}\PYZus{}}\PY{p}{)}
+\PY{k}{for} \PY{n}{root}\PY{p}{,} \PY{n}{dirs}\PY{p}{,} \PY{n}{files} \PY{o+ow}{in} \PY{n}{os}\PY{o}{.}\PY{n}{walk}\PY{p}{(}\PY{n}{package\PYZus{}path}\PY{p}{)}\PY{p}{:}
+    \PY{n}{level} \PY{o}{=} \PY{n}{root}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{n}{package\PYZus{}path}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{count}\PY{p}{(}\PY{n}{os}\PY{o}{.}\PY{n}{sep}\PY{p}{)}
+    \PY{n}{indent} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZsq{}} \PY{o}{*} \PY{l+m+mi}{4} \PY{o}{*} \PY{n}{level}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{indent}\PY{l+s+si}{\PYZcb{}}\PY{l+s+si}{\PYZob{}}\PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{basename}\PY{p}{(}\PY{n}{root}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{/}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{sub\PYZus{}indent} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZsq{}} \PY{o}{*} \PY{l+m+mi}{4} \PY{o}{*} \PY{p}{(}\PY{n}{level} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}
+    \PY{k}{for} \PY{n}{f} \PY{o+ow}{in} \PY{n}{files}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{sub\PYZus{}indent}\PY{l+s+si}{\PYZcb{}}\PY{l+s+si}{\PYZob{}}\PY{n}{f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FILE CONTENTS}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{k}{for} \PY{n}{root}\PY{p}{,} \PY{n}{dirs}\PY{p}{,} \PY{n}{files} \PY{o+ow}{in} \PY{n}{os}\PY{o}{.}\PY{n}{walk}\PY{p}{(}\PY{n}{package\PYZus{}path}\PY{p}{)}\PY{p}{:}
+    \PY{k}{for} \PY{n}{file} \PY{o+ow}{in} \PY{n}{files}\PY{p}{:}
+        \PY{n}{file\PYZus{}path} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{root}\PY{p}{,} \PY{n}{file}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{} Contents of }\PY{l+s+si}{\PYZob{}}\PY{n}{file\PYZus{}path}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ \PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{k}{try}\PY{p}{:}
+            \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{n}{file\PYZus{}path}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{r}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{encoding}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{utf\PYZhy{}8}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PY{k}{as} \PY{n}{f}\PY{p}{:}
+                \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{o}{.}\PY{n}{read}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+        \PY{k}{except} \PY{n+ne}{Exception} \PY{k}{as} \PY{n}{e}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Could not read }\PY{l+s+si}{\PYZob{}}\PY{n}{file\PYZus{}path}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{e}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+s2}{\PYZdq{}} \PY{o}{*} \PY{l+m+mi}{50} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
