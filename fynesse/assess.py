@@ -48,7 +48,7 @@ def pois_from_coordinates(latitude, longitude, tags, box_width=0.02, box_height=
     pois = ox.features_from_bbox((west, south, east, north), tags)
     return pois
 
-def count_pois_near_coordinates(latitude: float, longitude: float, tags: dict, distance_km: float = 1.0) -> dict:
+def count_pois_near_coordinates_alltrue(latitude: float, longitude: float, tags: dict, distance_km: float = 1.0) -> dict:
     """
     Count Points of Interest (POIs) near a given pair of coordinates within a specified distance.
     Args:
@@ -63,10 +63,7 @@ def count_pois_near_coordinates(latitude: float, longitude: float, tags: dict, d
     df = ox.features_from_point(center_point=(latitude,longitude), tags=tags, dist=distance_km*1000) # returns all pois in a circle with radius = distance_km in metres centered at center_point
     for feature in tags:
         if feature in df.columns:
-            if tags[feature] == True:
-                poi_counts[feature] = df[feature].notnull().sum()
-            elif type(tags[feature]) == list:
-                poi_counts[feature] = df[feature].isin(tags[feature]).sum()
+            poi_counts[feature] = df[feature].notnull().sum()
         else:
             poi_counts[feature] = 0
 
