@@ -43,3 +43,9 @@ def rmse_regularised(test_features, train_features, test_response, train_respons
     results = new_model.fit_regularized(alpha=alpha, L1_wt=L1_wt)
     predicted_response = results.predict(np.array(test_features))
     return mean_squared_error(np.array(test_response), predicted_response)
+
+def rmse_logit(test_features, train_features, test_response, train_response):
+    new_model = sm.Logit(np.array(train_response), np.array(train_features))
+    results = new_model.fit_regularized(method='l1_cvxopt_cp')
+    predicted_response = results.predict(np.array(test_features))
+    return mean_squared_error(np.array(test_response), predicted_response)
